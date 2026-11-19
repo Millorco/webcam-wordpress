@@ -1,0 +1,13 @@
+/* Viewlapse Portale clienti: barra del cliente. Una classe per regola: il tema la sovrascrive. */
+.vl-portale-bar {
+	display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .5rem 1rem;
+	padding: .6rem clamp(1rem, 4vw, 2.5rem);
+	background: #fff; color: #1e1e1e;
+	border-bottom: 4px solid var(--vl-portale-accent, #0b6e99);
+	font-size: .92rem; line-height: 1.4;
+}
+.vl-portale-bar a { color: var(--vl-portale-accent, #0b6e99); }
+.vl-portale-bar__home { display: inline-flex; align-items: center; text-decoration: none; }
+.vl-portale-bar__logo { display: block; max-height: 2.75rem; width: auto; }
+.vl-portale-bar__name { font-weight: 600; font-size: 1.05rem; color: #1e1e1e; }
+.vl-portale-bar__user { display: inline-flex; gap: .8rem; align-items: center; }
