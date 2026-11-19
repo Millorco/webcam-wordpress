@@ -1,0 +1,50 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "viewlapse/fotogiorno",
+    "version": "1.1.0",
+    "title": "Webcam: foto del giorno",
+    "category": "viewlapse",
+    "icon": "star-filled",
+    "description": "La foto migliore del giorno, con i formati per i social e le foto del mese.",
+    "keywords": [
+        "webcam",
+        "foto del giorno",
+        "social"
+    ],
+    "textdomain": "viewlapse-webcam",
+    "attributes": {
+        "webcam": {
+            "type": "string",
+            "default": ""
+        },
+        "scelta": {
+            "type": "boolean",
+            "default": false
+        },
+        "social": {
+            "type": "boolean",
+            "default": false
+        },
+        "mese": {
+            "type": "boolean",
+            "default": true
+        },
+        "dimensione": {
+            "type": "integer",
+            "default": 1920
+        }
+    },
+    "supports": {
+        "html": false,
+        "align": [
+            "wide",
+            "full"
+        ],
+        "spacing": {
+            "margin": true
+        }
+    },
+    "editorScript": "viewlapse-webcam-editor",
+    "style": "viewlapse-webcam"
+}

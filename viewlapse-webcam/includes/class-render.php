@@ -12,7 +12,9 @@ use WP_Error;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Disegna i cinque tipi di blocco: foto, archivio, confronto, grafico, elenco.
+ * Disegna i tipi di blocco: foto, archivio, confronto, grafico, elenco e,
+ * dalla 1.1, i servizi (timelapse, stesso momento, foto del giorno,
+ * statistiche, documenti) che sono in Services.
  *
  * Le scelte del visitatore (webcam, giorno, mese, date del confronto,
  * periodo del grafico) arrivano come parametri vl_* dell'URL della pagina
@@ -20,10 +22,13 @@ defined( 'ABSPATH' ) || exit;
  */
 final class Render {
 
-	public const KINDS = array( 'foto', 'archivio', 'confronto', 'grafico', 'elenco' );
+	public const KINDS = array( 'foto', 'archivio', 'confronto', 'grafico', 'elenco', 'timelapse', 'momento', 'fotogiorno', 'statistiche', 'documenti' );
+
+	/** Parametri vl_* che i blocchi leggono dall'URL della pagina. */
+	public const PARAMS = array( 'vl_cam', 'vl_date', 'vl_month', 'vl_a', 'vl_b', 'vl_giorni', 'vl_tl', 'vl_tlk', 'vl_ora', 'vl_passo', 'vl_year' );
 
 	/** Attributo sizes delle immagini grandi. */
-	private const SIZES_LARGE = '(min-width: 1200px) 1200px, 100vw';
+	public const SIZES_LARGE = '(min-width: 1200px) 1200px, 100vw';
 
 	/**
 	 * Blocco completo (contenitore con il contesto firmato e contenuto).
@@ -42,6 +47,9 @@ final class Render {
 		}
 		$id    = 'vl-' . $kind . '-' . wp_unique_id();
 		$inner = self::inner( $kind, $attrs, self::request_params(), $id );
+		if ( '' === $inner ) {
+			return ''; // funzione non inclusa e blocco da nascondere.
+		}
 		$data  = ' data-vl-kind="' . esc_attr( $kind ) . '" data-vl-ctx="' . esc_attr( Context::sign( $kind, $attrs ) ) . '"';
 		if ( 'foto' === $kind ) {
 			$data .= ' data-vl-refresh="' . esc_attr( (string) self::refresh_minutes( $attrs ) ) . '"';
@@ -72,6 +80,16 @@ final class Render {
 				return self::grafico( $attrs, $req, $id );
 			case 'elenco':
 				return self::elenco( $attrs );
+			case 'timelapse':
+				return Services::timelapse( $attrs, $req, $id );
+			case 'momento':
+				return Services::momento( $attrs, $req, $id );
+			case 'fotogiorno':
+				return Services::fotogiorno( $attrs, $req, $id );
+			case 'statistiche':
+				return Services::statistiche( $attrs, $req, $id );
+			case 'documenti':
+				return Services::documenti( $attrs, $req, $id );
 		}
 		return '';
 	}
@@ -109,6 +127,22 @@ final class Render {
 				$out['giorni'] = (string) $g;
 			}
 		}
+		if ( isset( $src['vl_tl'] ) && is_scalar( $src['vl_tl'] ) && preg_match( '/^[0-9]{1,12}$/', (string) $src['vl_tl'] ) ) {
+			$out['tl'] = (string) $src['vl_tl'];
+		}
+		if ( isset( $src['vl_tlk'] ) && is_string( $src['vl_tlk'] ) && in_array( $src['vl_tlk'], array( 'day', 'week', 'month', 'custom', 'final' ), true ) ) {
+			$out['tlk'] = $src['vl_tlk'];
+		}
+		$ora = Format::valid_time( $src['vl_ora'] ?? null );
+		if ( null !== $ora ) {
+			$out['ora'] = $ora;
+		}
+		if ( isset( $src['vl_passo'] ) && is_string( $src['vl_passo'] ) && in_array( $src['vl_passo'], array( 'day', 'week', 'month', 'year' ), true ) ) {
+			$out['passo'] = $src['vl_passo'];
+		}
+		if ( isset( $src['vl_year'] ) && is_scalar( $src['vl_year'] ) && preg_match( '/^20[0-9]{2}$/', (string) $src['vl_year'] ) ) {
+			$out['year'] = (string) $src['vl_year'];
+		}
 		return $out;
 	}
 
@@ -137,6 +171,137 @@ final class Render {
 		return (bool) apply_filters( 'viewlapse_webcam_can_download', current_user_can( 'vl_download_original' ) );
 	}
 
+	/**
+	 * L'utente corrente può scaricare rapporti, certificati ed elenchi del registro.
+	 */
+	public static function can_download_docs(): bool {
+		/**
+		 * Filtra il permesso di scaricare i documenti del cliente (PDF dei rapporti e dei certificati, registro).
+		 *
+		 * @param bool $can Predefinito: capacità vl_download_documents o manage_options.
+		 */
+		return (bool) apply_filters( 'viewlapse_webcam_can_download_docs', current_user_can( 'vl_download_documents' ) || current_user_can( 'manage_options' ) );
+	}
+
+	// ------------------------------------------------------------ funzioni del listino (1.1)
+
+	/**
+	 * Funzioni attive della webcam, o null se il portal non le manda (API dei siti 1.0).
+	 *
+	 * @param array<string, mixed> $cam Webcam.
+	 * @return array<int, string>|null
+	 */
+	public static function features( array $cam ): ?array {
+		if ( ! isset( $cam['features'] ) || ! is_array( $cam['features'] ) ) {
+			return null;
+		}
+		return array_values( array_map( 'strval', $cam['features'] ) );
+	}
+
+	/**
+	 * La webcam ha la funzione: true, false o null (portal senza `features`).
+	 *
+	 * @param array<string, mixed> $cam     Webcam.
+	 * @param string               $feature Funzione.
+	 */
+	public static function has( array $cam, string $feature ): ?bool {
+		$f = self::features( $cam );
+		return null === $f ? null : in_array( $feature, $f, true );
+	}
+
+	/**
+	 * Messaggio per una funzione che manca, o '' se il blocco va nascosto.
+	 *
+	 * Ai visitatori: messaggio cortese o niente (impostazione "Funzioni non
+	 * incluse"); a chi modifica i contenuti sempre la spiegazione.
+	 *
+	 * @param string $why     feature (non nel listino), portal (portal senza API 1.1), scope (serve la chiave client), archived.
+	 * @param string $feature Funzione.
+	 * @param string $sel     Selettore della webcam da tenere visibile.
+	 */
+	public static function unavailable( string $why, string $feature, string $sel = '' ): string {
+		$editor = current_user_can( 'edit_posts' );
+		switch ( $why ) {
+			case 'portal':
+				$msg = __( 'Il portal Viewlapse non offre ancora questa funzione: serve l\'API dei siti 1.1 (portal 0.4).', 'viewlapse-webcam' );
+				break;
+			case 'scope':
+				$msg = __( 'Questa funzione è disponibile solo nell\'area riservata del cliente (chiave "client").', 'viewlapse-webcam' );
+				break;
+			case 'archived':
+				$msg = __( 'Non disponibile per le webcam in archivio dopo la fine del noleggio.', 'viewlapse-webcam' );
+				break;
+			default:
+				/**
+				 * Filtra il messaggio cortese per una funzione non inclusa nel servizio della webcam.
+				 *
+				 * @param string $msg     Messaggio.
+				 * @param string $feature Funzione (timelapse, same_moment, photo_of_day, stats, monthly_report, weather_cert...).
+				 */
+				$msg = (string) apply_filters( 'viewlapse_webcam_feature_message', __( 'Questa funzione non è compresa nel servizio attivo per questa webcam.', 'viewlapse-webcam' ), $feature );
+		}
+		if ( $editor ) {
+			/* translators: %s: nome della funzione nel listino */
+			$msg .= ' ' . sprintf( __( '(funzione "%s"; messaggio visibile a chi modifica i contenuti)', 'viewlapse-webcam' ), $feature );
+		} elseif ( 'portal' === $why || 'scope' === $why ) {
+			return ''; // ai visitatori non serve sapere perché manca: blocco nascosto.
+		} elseif ( 'hide' === Settings::value( 'missing_feature' ) ) {
+			// Resta il selettore, per scegliere un'altra webcam.
+			return '' !== $sel ? $sel . '<p class="vl-message">' . esc_html__( 'Non disponibile per questa webcam.', 'viewlapse-webcam' ) . '</p>' : '';
+		}
+		return $sel . '<p class="vl-message vl-message--feature" role="status">' . esc_html( $msg ) . '</p>';
+	}
+
+	/**
+	 * Messaggio per un errore dell'API dei servizi (403 feature_unavailable,
+	 * scope_client_required) o null se è un errore qualsiasi.
+	 *
+	 * @param WP_Error $e       Errore.
+	 * @param string   $feature Funzione.
+	 * @param string   $sel     Selettore.
+	 */
+	public static function service_error( WP_Error $e, string $feature, string $sel = '' ): string {
+		$code = (string) $e->get_error_code();
+		if ( 'feature_unavailable' === $code ) {
+			return self::unavailable( 'feature', $feature, $sel );
+		}
+		if ( 'scope_client_required' === $code ) {
+			return self::unavailable( 'scope', $feature, $sel );
+		}
+		return $sel . self::error( $e );
+	}
+
+	/**
+	 * Attributi del beacon delle visualizzazioni (api-siti-v1.md), se attivo.
+	 *
+	 * Il token arriva dal portal com'è; si usa solo se l'URL è quello del
+	 * portal configurato. Il browser manda il conteggio senza cookie.
+	 *
+	 * @param array<string, mixed> $cam Webcam.
+	 */
+	public static function beacon_attrs( array $cam ): string {
+		$b = is_array( $cam['beacon'] ?? null ) ? $cam['beacon'] : null;
+		if ( ! $b || empty( $b['url'] ) || empty( $b['token'] ) || ! Settings::value( 'beacon' ) ) {
+			return '';
+		}
+		/**
+		 * Attiva o spegne il conteggio delle visualizzazioni per una webcam.
+		 *
+		 * @param bool  $on  Predefinito: impostazione del sito.
+		 * @param array $cam Webcam.
+		 */
+		if ( ! apply_filters( 'viewlapse_webcam_beacon', true, $cam ) ) {
+			return '';
+		}
+		$url   = (string) $b['url'];
+		$token = (string) $b['token'];
+		$host  = wp_parse_url( (string) Settings::value( 'portal_url' ), PHP_URL_HOST );
+		if ( ! $host || wp_parse_url( $url, PHP_URL_HOST ) !== $host || ! preg_match( '#^https?://#', $url ) || ! preg_match( '/^[A-Za-z0-9._-]{8,200}$/', $token ) ) {
+			return '';
+		}
+		return ' data-vl-beacon="' . esc_attr( $token ) . '" data-vl-beacon-url="' . esc_url( $url ) . '"';
+	}
+
 	// ------------------------------------------------------------ parti comuni
 
 	/**
@@ -144,7 +309,7 @@ final class Render {
 	 *
 	 * @param WP_Error|string $e Errore.
 	 */
-	private static function error( $e ): string {
+	public static function error( $e ): string {
 		$msg = __( 'Webcam non disponibile al momento.', 'viewlapse-webcam' );
 		if ( is_string( $e ) ) {
 			$msg = $e;
@@ -163,9 +328,10 @@ final class Render {
 	 * @param array<string, string> $req   Scelte del visitatore.
 	 * @param string                $sel   HTML del selettore (uscita).
 	 * @param string                $id    Id del blocco.
+	 * @param string                $feature Funzione richiesta (1.1): nel selettore solo le webcam che ce l'hanno.
 	 * @return array<string, mixed>|WP_Error
 	 */
-	private static function camera( array $attrs, array $req, ?string &$sel, string $id ) {
+	public static function camera( array $attrs, array $req, ?string &$sel, string $id, string $feature = '' ) {
 		$sel      = '';
 		$slug     = sanitize_title( (string) ( $attrs['webcam'] ?? '' ) );
 		$selector = Format::bool( $attrs['scelta'] ?? false ) || '' === $slug;
@@ -173,6 +339,10 @@ final class Render {
 			$list = Api::webcams();
 			if ( is_wp_error( $list ) ) {
 				return $list;
+			}
+			if ( '' !== $feature ) {
+				$with = array_values( array_filter( $list, static fn( $c ) => false !== self::has( (array) $c, $feature ) ) );
+				$list = $with ? $with : $list; // nessuna con la funzione: si mostra il messaggio sulla prima.
 			}
 			$slugs = array_column( $list, 'slug' );
 			if ( isset( $req['cam'] ) && in_array( $req['cam'], $slugs, true ) ) {
@@ -206,7 +376,8 @@ final class Render {
 		$o .= '<label for="' . esc_attr( $id ) . '-cam">' . esc_html__( 'Webcam', 'viewlapse-webcam' ) . '</label> ';
 		$o .= '<select id="' . esc_attr( $id ) . '-cam" name="vl_cam">';
 		foreach ( $list as $c ) {
-			$o .= '<option value="' . esc_attr( (string) $c['slug'] ) . '"' . selected( $c['slug'], $slug, false ) . '>' . esc_html( (string) $c['name'] ) . '</option>';
+			$name = (string) $c['name'] . ( 'archived' === ( $c['state'] ?? '' ) ? ' ' . __( '(archivio)', 'viewlapse-webcam' ) : '' );
+			$o   .= '<option value="' . esc_attr( (string) $c['slug'] ) . '"' . selected( $c['slug'], $slug, false ) . '>' . esc_html( $name ) . '</option>';
 		}
 		$o .= '</select> <button type="submit" class="vl-button vl-select__go">' . esc_html__( 'Mostra', 'viewlapse-webcam' ) . '</button></form>';
 		return $o;
@@ -218,7 +389,7 @@ final class Render {
 	 * @param array<string, string> $args Parametri.
 	 * @param string                $id   Id del blocco.
 	 */
-	private static function link( array $args, string $id ): string {
+	public static function link( array $args, string $id ): string {
 		$args = array_filter( $args, static fn( $v ) => '' !== (string) $v );
 		return esc_url( '?' . http_build_query( $args, '', '&' ) . '#' . $id );
 	}
@@ -229,7 +400,7 @@ final class Render {
 	 * @param array<string, mixed>  $cam Webcam.
 	 * @param string                $sel Selettore presente.
 	 */
-	private static function keep( array $cam, string $sel ): array {
+	public static function keep( array $cam, string $sel ): array {
 		return '' !== $sel ? array( 'vl_cam' => (string) $cam['slug'] ) : array();
 	}
 
@@ -239,7 +410,7 @@ final class Render {
 	 * @param mixed $t Temperatura.
 	 * @param mixed $u Umidità.
 	 */
-	private static function weather_text( $t, $u ): string {
+	public static function weather_text( $t, $u ): string {
 		$parts = array();
 		if ( is_numeric( $t ) ) {
 			$parts[] = Format::num( $t, '°C' );
@@ -255,7 +426,7 @@ final class Render {
 	 *
 	 * @param string $state Stato.
 	 */
-	private static function badge( string $state ): string {
+	public static function badge( string $state ): string {
 		return '<span class="vl-state vl-state--' . esc_attr( sanitize_key( $state ) ) . '">' . esc_html( Format::state_label( $state ) ) . '</span>';
 	}
 
@@ -279,9 +450,13 @@ final class Render {
 		$max   = in_array( (int) $attrs['dimensione'], Format::SIZES, true ) ? (int) $attrs['dimensione'] : 1920;
 		$name  = (string) ( $cam['name'] ?? '' );
 
+		$archived = 'archived' === $state;
+		$items    = ( Format::bool( $attrs['sponsor'] ?? true ) && true === self::has( $cam, 'sponsor' ) && ! $archived ) ? Api::overlay_items( (string) $cam['slug'] ) : null;
+		$items    = is_array( $items ) ? $items : null;
+
 		$o  = $sel;
-		$o .= '<figure class="vl-foto__figure" data-vl-sig="' . esc_attr( ( $photo['id'] ?? 0 ) . '|' . $state ) . '">';
-		$o .= '<div class="vl-foto__media">';
+		$o .= '<figure class="vl-foto__figure" data-vl-sig="' . esc_attr( ( $photo['id'] ?? 0 ) . '|' . $state ) . '"' . ( $archived ? ' data-vl-archived' : '' ) . '>';
+		$o .= '<div class="vl-foto__media"' . ( $photo ? self::beacon_attrs( $cam ) : '' ) . '>';
 		if ( $photo ) {
 			/* translators: 1: nome della webcam, 2: data e ora */
 			$alt = sprintf( __( 'Webcam %1$s, foto del %2$s', 'viewlapse-webcam' ), $name, Format::datetime( (int) $photo['time'], $tz ) );
@@ -289,10 +464,17 @@ final class Render {
 		} else {
 			$o .= '<p class="vl-foto__empty">' . esc_html__( 'Nessuna foto disponibile.', 'viewlapse-webcam' ) . '</p>';
 		}
+		if ( $photo && $items ) {
+			$o .= self::infopoints( (array) ( $items['infopoints'] ?? array() ) );
+		}
 		if ( Format::bool( $attrs['stato'] ) && '' !== $state ) {
 			$o .= self::badge( $state );
 		}
 		$o .= '</div><figcaption class="vl-foto__caption">';
+		if ( $archived && ! empty( $cam['archive_until'] ) ) {
+			/* translators: %s: data */
+			$o .= '<span class="vl-foto__archived">' . esc_html( sprintf( __( 'Noleggio concluso: archivio visibile fino al %s.', 'viewlapse-webcam' ), Format::date( (string) $cam['archive_until'], $tz ) ) ) . '</span> ';
+		}
 		if ( Format::bool( $attrs['titolo'] ) ) {
 			$o .= '<span class="vl-foto__name">' . esc_html( $name ) . '</span>';
 			if ( ! empty( $cam['location'] ) ) {
@@ -314,7 +496,59 @@ final class Render {
 			$o .= ' <a class="vl-download" href="' . esc_url( (string) $photo['images']['orig'] ) . '" target="_blank" rel="noopener">' . esc_html__( 'Scarica l\'originale', 'viewlapse-webcam' ) . '</a>';
 		}
 		$o .= '</figcaption></figure>';
+		if ( $items ) {
+			$o .= self::sponsors( (array) ( $items['sponsors'] ?? array() ) );
+		}
 		return $o;
+	}
+
+	/**
+	 * Infopoint cliccabili sopra la foto (x_pct, y_pct dell'immagine intera).
+	 *
+	 * @param array<int, array<string, mixed>> $points Infopoint di overlay-items.
+	 */
+	private static function infopoints( array $points ): string {
+		$o = '';
+		foreach ( $points as $p ) {
+			if ( ! is_numeric( $p['x_pct'] ?? null ) || ! is_numeric( $p['y_pct'] ?? null ) ) {
+				continue;
+			}
+			$x     = max( 0, min( 100, (float) $p['x_pct'] ) );
+			$y     = max( 0, min( 100, (float) $p['y_pct'] ) );
+			$label = (string) ( $p['label'] ?? '' );
+			$text  = trim( $label . ( empty( $p['text'] ) ? '' : ' – ' . (string) $p['text'] ) );
+			$cls   = 'vl-info' . ( ! empty( $p['burned'] ) ? ' vl-info--burned' : '' );
+			$style = 'left:' . number_format( $x, 2, '.', '' ) . '%;top:' . number_format( $y, 2, '.', '' ) . '%';
+			$inner = '<span class="vl-info__dot" aria-hidden="true"></span>' . ( empty( $p['burned'] ) ? '<span class="vl-info__label">' . esc_html( $label ) . '</span>' : '<span class="screen-reader-text vl-sr">' . esc_html( $label ) . '</span>' );
+			if ( ! empty( $p['url'] ) ) {
+				$o .= '<a class="' . esc_attr( $cls ) . '" style="' . esc_attr( $style ) . '" href="' . esc_url( (string) $p['url'] ) . '" title="' . esc_attr( $text ) . '" target="_blank" rel="noopener">' . $inner . '</a>';
+			} else {
+				$o .= '<span class="' . esc_attr( $cls ) . '" style="' . esc_attr( $style ) . '" title="' . esc_attr( $text ) . '" tabindex="0">' . $inner . '</span>';
+			}
+		}
+		return $o;
+	}
+
+	/**
+	 * Sponsor sotto la foto (logo e link).
+	 *
+	 * @param array<int, array<string, mixed>> $list Sponsor di overlay-items.
+	 */
+	private static function sponsors( array $list ): string {
+		if ( ! $list ) {
+			return '';
+		}
+		$o = '<ul class="vl-sponsors" aria-label="' . esc_attr__( 'Sponsor', 'viewlapse-webcam' ) . '">';
+		foreach ( $list as $sp ) {
+			$label = (string) ( $sp['label'] ?? '' );
+			$in    = ! empty( $sp['logo_url'] ) ? '<img src="' . esc_url( (string) $sp['logo_url'] ) . '" alt="" loading="lazy" decoding="async">' : '';
+			$in   .= '<span class="vl-sponsor__label">' . esc_html( $label ) . '</span>';
+			if ( ! empty( $sp['text'] ) ) {
+				$in .= ' <span class="vl-sponsor__text">' . esc_html( (string) $sp['text'] ) . '</span>';
+			}
+			$o .= '<li class="vl-sponsor">' . ( ! empty( $sp['url'] ) ? '<a href="' . esc_url( (string) $sp['url'] ) . '" target="_blank" rel="sponsored noopener">' . $in . '</a>' : $in ) . '</li>';
+		}
+		return $o . '</ul>';
 	}
 
 	// ------------------------------------------------------------ archivio
@@ -327,9 +561,12 @@ final class Render {
 	 * @param string                $id    Id.
 	 */
 	private static function archivio( array $attrs, array $req, string $id ): string {
-		$cam = self::camera( $attrs, $req, $sel, $id );
+		$cam = self::camera( $attrs, $req, $sel, $id, 'archive' );
 		if ( is_wp_error( $cam ) ) {
 			return self::error( $cam );
+		}
+		if ( false === self::has( $cam, 'archive' ) ) {
+			return self::unavailable( 'feature', 'archive', $sel );
 		}
 		$tz      = Format::tz( $cam );
 		$slug    = (string) $cam['slug'];
@@ -369,7 +606,7 @@ final class Render {
 			} else {
 				$cols     = max( 1, min( 8, (int) $attrs['colonne'] ) );
 				$download = self::can_download();
-				$o       .= '<ul class="vl-grid" style="--vl-cols:' . esc_attr( (string) $cols ) . '" data-vl-gallery>';
+				$o       .= '<ul class="vl-grid" style="--vl-cols:' . esc_attr( (string) $cols ) . '" data-vl-gallery' . self::beacon_attrs( $cam ) . '>';
 				foreach ( $list as $p ) {
 					$full = Format::img( $p, 1920 );
 					if ( null === $full ) {
@@ -471,9 +708,12 @@ final class Render {
 	 * @param string                $id    Id.
 	 */
 	private static function confronto( array $attrs, array $req, string $id ): string {
-		$cam = self::camera( $attrs, $req, $sel, $id );
+		$cam = self::camera( $attrs, $req, $sel, $id, 'archive' );
 		if ( is_wp_error( $cam ) ) {
 			return self::error( $cam );
+		}
+		if ( false === self::has( $cam, 'archive' ) ) {
+			return self::unavailable( 'feature', 'archive', $sel );
 		}
 		$tz      = Format::tz( $cam );
 		$archive = is_array( $cam['archive'] ?? null ) ? $cam['archive'] : null;
@@ -518,7 +758,7 @@ final class Render {
 		$size = in_array( (int) $attrs['dimensione'], Format::SIZES, true ) ? (int) $attrs['dimensione'] : 1920;
 		$la   = Format::datetime( (int) $pa['time'], $tz );
 		$lb   = Format::datetime( (int) $pb['time'], $tz );
-		$o   .= '<div class="vl-cmp" style="--vl-pos:50%">';
+		$o   .= '<div class="vl-cmp" style="--vl-pos:50%"' . self::beacon_attrs( $cam ) . '>';
 		/* translators: %s: data e ora */
 		$o .= Format::img_tag( $pa, $size, self::SIZES_LARGE, sprintf( __( 'Prima: %s', 'viewlapse-webcam' ), $la ), array( 'class' => 'vl-cmp__img vl-cmp__img--a' ) );
 		/* translators: %s: data e ora */
@@ -541,9 +781,12 @@ final class Render {
 	 * @param string                $id    Id.
 	 */
 	private static function grafico( array $attrs, array $req, string $id ): string {
-		$cam = self::camera( $attrs, $req, $sel, $id );
+		$cam = self::camera( $attrs, $req, $sel, $id, 'archive' );
 		if ( is_wp_error( $cam ) ) {
 			return self::error( $cam );
+		}
+		if ( false === self::has( $cam, 'archive' ) ) {
+			return self::unavailable( 'feature', 'archive', $sel );
 		}
 		$tz     = Format::tz( $cam );
 		$choose = Format::bool( $attrs['scegli'] );
@@ -623,7 +866,7 @@ final class Render {
 			$cards .= '<li class="vl-card">';
 			if ( $photo ) {
 				$img    = $last ? Format::img_tag( $last, 640, '(min-width: 900px) 33vw, 100vw', (string) $c['name'], array( 'loading' => 'lazy' ) ) : '<span class="vl-card__noimg">' . esc_html__( 'Nessuna foto', 'viewlapse-webcam' ) . '</span>';
-				$cards .= '<div class="vl-card__media">' . ( '' !== $url ? '<a href="' . esc_url( $url ) . '" tabindex="-1" aria-hidden="true">' . $img . '</a>' : $img ) . self::badge( $state ) . '</div>';
+				$cards .= '<div class="vl-card__media"' . ( $last ? self::beacon_attrs( $c ) : '' ) . '>' . ( '' !== $url ? '<a href="' . esc_url( $url ) . '" tabindex="-1" aria-hidden="true">' . $img . '</a>' : $img ) . self::badge( $state ) . '</div>';
 			}
 			$name   = esc_html( (string) $c['name'] );
 			$cards .= '<h3 class="vl-card__title">' . ( '' !== $url ? '<a href="' . esc_url( $url ) . '">' . $name . '</a>' : $name ) . '</h3>';

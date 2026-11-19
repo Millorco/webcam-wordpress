@@ -1,0 +1,50 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "viewlapse/statistiche",
+    "version": "1.1.0",
+    "title": "Webcam: statistiche",
+    "category": "viewlapse",
+    "icon": "chart-bar",
+    "description": "Visualizzazioni e visitatori della webcam (solo area riservata del cliente).",
+    "keywords": [
+        "webcam",
+        "statistiche",
+        "visite"
+    ],
+    "textdomain": "viewlapse-webcam",
+    "attributes": {
+        "webcam": {
+            "type": "string",
+            "default": ""
+        },
+        "scelta": {
+            "type": "boolean",
+            "default": false
+        },
+        "giorni": {
+            "type": "integer",
+            "default": 30
+        },
+        "scegli": {
+            "type": "boolean",
+            "default": true
+        },
+        "altezza": {
+            "type": "integer",
+            "default": 220
+        }
+    },
+    "supports": {
+        "html": false,
+        "align": [
+            "wide",
+            "full"
+        ],
+        "spacing": {
+            "margin": true
+        }
+    },
+    "editorScript": "viewlapse-webcam-editor",
+    "style": "viewlapse-webcam"
+}

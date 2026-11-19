@@ -4,14 +4,17 @@
  * - cambio di giorno, mese, webcam e date senza ricaricare la pagina
  *   (i link e i moduli funzionano anche senza JavaScript);
  * - visualizzatore a schermo intero con frecce, tastiera e scorrimento;
- * - cursore del prima/dopo.
+ * - cursore del prima/dopo;
+ * - sfoglia dello stesso momento in giorni diversi;
+ * - beacon delle visualizzazioni (api-siti-v1.md): nessun cookie, niente
+ *   salvato nel browser, al portal arriva solo l'origine del sito.
  */
 ( function () {
 	'use strict';
 
 	var cfg = window.VLWebcam || {};
 	var t = cfg.i18n || {};
-	var PARAMS = [ 'vl_cam', 'vl_date', 'vl_month', 'vl_a', 'vl_b', 'vl_giorni' ];
+	var PARAMS = [ 'vl_cam', 'vl_date', 'vl_month', 'vl_a', 'vl_b', 'vl_giorni', 'vl_tl', 'vl_tlk', 'vl_ora', 'vl_passo', 'vl_year' ];
 
 	document.documentElement.classList.add( 'js-vl' );
 
@@ -144,7 +147,16 @@
 			case 'confronto':
 				return [ 'vl_cam', 'vl_a', 'vl_b' ];
 			case 'grafico':
+			case 'statistiche':
 				return [ 'vl_cam', 'vl_giorni' ];
+			case 'timelapse':
+				return [ 'vl_cam', 'vl_tl', 'vl_tlk' ];
+			case 'momento':
+				return [ 'vl_cam', 'vl_ora', 'vl_passo', 'vl_giorni' ];
+			case 'fotogiorno':
+				return [ 'vl_cam', 'vl_date', 'vl_month' ];
+			case 'documenti':
+				return [ 'vl_cam', 'vl_year', 'vl_month' ];
 			default:
 				return [ 'vl_cam' ];
 		}
@@ -160,7 +172,7 @@
 		var every = min * 60000;
 		var last = Date.now();
 		function tick() {
-			if ( document.hidden ) {
+			if ( document.hidden || block.querySelector( '[data-vl-archived]' ) ) {
 				return;
 			}
 			last = Date.now();
@@ -181,6 +193,7 @@
 					var img = tmp.querySelector( 'img' );
 					var swap = function () {
 						block.innerHTML = data.html;
+						setup( block );
 					};
 					if ( ! img ) {
 						swap();
@@ -335,6 +348,7 @@
 		var gallery = a.closest( '[data-vl-gallery]' );
 		lbItems = Array.prototype.slice.call( gallery.querySelectorAll( 'a.vl-thumb' ) );
 		lbOpener = a;
+		beaconEvent( gallery, 'open' );
 		lb.hidden = false;
 		document.documentElement.classList.add( 'vl-noscroll' );
 		show( lbItems.indexOf( a ) );
@@ -358,10 +372,203 @@
 		open( a );
 	}
 
+	// ------------------------------------------------------------ sfoglia (stesso momento)
+
+	function setupFlip( root ) {
+		root.querySelectorAll( '.vl-flip' ).forEach( function ( box ) {
+			if ( box.dataset.vlReady ) {
+				return;
+			}
+			box.dataset.vlReady = '1';
+			var frames = [];
+			try {
+				frames = JSON.parse( box.getAttribute( 'data-vl-frames' ) || '[]' );
+			} catch ( e ) {
+				return;
+			}
+			var img = box.querySelector( '.vl-flip__img' );
+			var range = box.querySelector( '.vl-flip__range' );
+			var label = box.querySelector( '.vl-flip__label' );
+			var play = box.querySelector( '.vl-flip__play' );
+			var timer = null;
+			if ( ! img || ! range || ! frames.length ) {
+				return;
+			}
+			var set = function ( i ) {
+				var f = frames[ i ];
+				if ( ! f ) {
+					return;
+				}
+				img.srcset = f.srcset || '';
+				img.src = f.src;
+				img.alt = f.label || '';
+				if ( label ) {
+					label.textContent = f.label || '';
+				}
+			};
+			range.addEventListener( 'input', function () {
+				set( parseInt( range.value, 10 ) );
+			} );
+			// Precarica le vicine mentre si scorre.
+			range.addEventListener( 'change', function () {
+				var i = parseInt( range.value, 10 );
+				[ i - 1, i + 1 ].forEach( function ( j ) {
+					if ( frames[ j ] ) {
+						var p = new Image();
+						p.sizes = img.sizes;
+						p.srcset = frames[ j ].srcset || '';
+						p.src = frames[ j ].src;
+					}
+				} );
+			} );
+			var stop = function () {
+				clearInterval( timer );
+				timer = null;
+				play.setAttribute( 'aria-pressed', 'false' );
+				play.textContent = t.play || 'Riproduci';
+			};
+			if ( play ) {
+				play.addEventListener( 'click', function () {
+					if ( timer ) {
+						stop();
+						return;
+					}
+					if ( parseInt( range.value, 10 ) >= frames.length - 1 ) {
+						range.value = 0;
+						set( 0 );
+					}
+					play.setAttribute( 'aria-pressed', 'true' );
+					play.textContent = t.pause || 'Pausa';
+					beaconEvent( box, 'play' );
+					timer = setInterval( function () {
+						var i = parseInt( range.value, 10 ) + 1;
+						if ( i >= frames.length || ! document.body.contains( box ) ) {
+							stop();
+							return;
+						}
+						range.value = i;
+						set( i );
+					}, 600 );
+				} );
+			}
+		} );
+	}
+
+	// ------------------------------------------------------------ beacon delle visualizzazioni
+
+	var seen = {};
+	var watched = [];
+	var visibleSince = document.hidden ? 0 : Date.now();
+	var visibleMs = 0;
+
+	function send( url, token, ev, s ) {
+		var body = 't=' + encodeURIComponent( token ) + '&ev=' + ev + ( ev === 'leave' ? '&s=' + Math.max( 0, Math.min( 3600, Math.round( s ) ) ) : '' );
+		try {
+			// Senza cookie e senza l'indirizzo della pagina (solo l'origine).
+			window.fetch( url, {
+				method: 'POST',
+				body: body,
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+				credentials: 'omit',
+				mode: 'no-cors',
+				keepalive: true,
+				referrerPolicy: 'origin',
+			} ).catch( function () {} );
+		} catch ( e ) {
+			if ( navigator.sendBeacon ) {
+				navigator.sendBeacon( url, new Blob( [ body ], { type: 'application/x-www-form-urlencoded' } ) );
+			}
+		}
+	}
+
+	function beaconOf( el ) {
+		var b = el && el.closest( '[data-vl-beacon]' );
+		if ( ! b ) {
+			b = el && el.querySelector && el.querySelector( '[data-vl-beacon]' );
+		}
+		return b ? { token: b.getAttribute( 'data-vl-beacon' ), url: b.getAttribute( 'data-vl-beacon-url' ) } : null;
+	}
+
+	function beaconEvent( el, ev ) {
+		var b = beaconOf( el );
+		if ( b && b.token && b.url ) {
+			send( b.url, b.token, ev, 0 );
+		}
+	}
+
+	function onView( el ) {
+		var b = beaconOf( el );
+		// Un "view" per caricamento di pagina e per webcam (stesso token = stessa webcam e chiave).
+		if ( ! b || ! b.token || ! b.url || seen[ b.token ] ) {
+			return;
+		}
+		seen[ b.token ] = b;
+		send( b.url, b.token, 'view', 0 );
+	}
+
+	var observer = ( 'IntersectionObserver' in window ) ? new IntersectionObserver( function ( entries ) {
+		entries.forEach( function ( e ) {
+			if ( e.isIntersecting ) {
+				observer.unobserve( e.target );
+				onView( e.target );
+			}
+		} );
+	}, { threshold: 0.3 } ) : null;
+
+	function setupBeacon( root ) {
+		var list = root.querySelectorAll ? root.querySelectorAll( '[data-vl-beacon]' ) : [];
+		Array.prototype.forEach.call( list, function ( el ) {
+			if ( watched.indexOf( el ) !== -1 ) {
+				return;
+			}
+			watched.push( el );
+			if ( observer ) {
+				observer.observe( el );
+			} else {
+				onView( el );
+			}
+		} );
+	}
+
+	function flushLeave() {
+		if ( visibleSince ) {
+			visibleMs += Date.now() - visibleSince;
+			visibleSince = 0;
+		}
+		var s = visibleMs / 1000;
+		visibleMs = 0;
+		if ( s < 1 ) {
+			return;
+		}
+		Object.keys( seen ).forEach( function ( token ) {
+			send( seen[ token ].url, token, 'leave', s );
+		} );
+	}
+
+	document.addEventListener( 'visibilitychange', function () {
+		if ( document.hidden ) {
+			flushLeave();
+		} else {
+			visibleSince = Date.now();
+		}
+	} );
+	window.addEventListener( 'pagehide', flushLeave );
+
+	// Avvio di un timelapse: un "play" per video e per caricamento.
+	document.addEventListener( 'play', function ( e ) {
+		var v = e.target;
+		if ( v && v.tagName === 'VIDEO' && v.classList.contains( 'vl-tl__video' ) && ! v.dataset.vlPlayed ) {
+			v.dataset.vlPlayed = '1';
+			beaconEvent( v, 'play' );
+		}
+	}, true );
+
 	// ------------------------------------------------------------ avvio
 
 	function setup( root ) {
 		setupCompare( root );
+		setupFlip( root );
+		setupBeacon( root );
 	}
 
 	function init() {

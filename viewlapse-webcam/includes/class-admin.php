@@ -26,6 +26,21 @@ final class Admin {
 		add_action( 'admin_post_vl_webcam_test', array( self::class, 'test' ) );
 		add_action( 'admin_post_vl_webcam_flush', array( self::class, 'flush' ) );
 		add_filter( 'plugin_action_links_' . plugin_basename( VIEWLAPSE_WEBCAM_FILE ), array( self::class, 'links' ) );
+		add_action( 'admin_init', array( self::class, 'privacy' ) );
+	}
+
+	/**
+	 * Testo suggerito per l'informativa sulla privacy del sito.
+	 */
+	public static function privacy(): void {
+		if ( ! function_exists( 'wp_add_privacy_policy_content' ) ) {
+			return;
+		}
+		wp_add_privacy_policy_content(
+			__( 'Viewlapse Webcam', 'viewlapse-webcam' ),
+			'<p>' . esc_html__( 'Le immagini delle webcam sono servite dal portal Viewlapse: il browser del visitatore le scarica direttamente dal portal, che vede l\'indirizzo IP come qualsiasi server web.', 'viewlapse-webcam' ) . '</p>'
+			. '<p>' . esc_html__( 'Per le statistiche delle webcam il sito manda al portal un conteggio quando una webcam è visibile nella pagina (e la durata di visione, l\'avvio di un timelapse, l\'apertura di una foto). Sono statistiche aggregate senza cookie: nessun dato è salvato nel browser e il portal non conserva dati personali (l\'impronta usata per contare i visitatori distinti di un giorno non è più ricollegabile all\'indirizzo IP dopo 48 ore). Al portal arriva solo il nome del sito, non l\'indirizzo della pagina.', 'viewlapse-webcam' ) . '</p>'
+		);
 	}
 
 	/**
@@ -147,6 +162,18 @@ final class Admin {
 						</td>
 					</tr>
 					<tr>
+						<th scope="row"><?php esc_html_e( 'Statistiche', 'viewlapse-webcam' ); ?></th>
+						<td><label><input type="checkbox" name="<?php echo esc_attr( $o ); ?>[beacon]" value="1" <?php checked( ! empty( $s['beacon'] ) ); ?>> <?php esc_html_e( 'Conta le visualizzazioni delle webcam (statistiche aggregate senza cookie, nessun dato personale conservato)', 'viewlapse-webcam' ); ?></label></td>
+					</tr>
+					<tr>
+						<th scope="row"><label for="vl-missing"><?php esc_html_e( 'Funzioni non incluse', 'viewlapse-webcam' ); ?></label></th>
+						<td><select id="vl-missing" name="<?php echo esc_attr( $o ); ?>[missing_feature]">
+							<option value="message" <?php selected( $s['missing_feature'], 'message' ); ?>><?php esc_html_e( 'Mostra un messaggio cortese', 'viewlapse-webcam' ); ?></option>
+							<option value="hide" <?php selected( $s['missing_feature'], 'hide' ); ?>><?php esc_html_e( 'Nascondi il blocco', 'viewlapse-webcam' ); ?></option>
+						</select>
+						<p class="description"><?php esc_html_e( 'Quando un blocco (timelapse, stesso momento, foto del giorno...) usa una funzione che non è nel servizio della webcam. Chi modifica i contenuti vede sempre la spiegazione.', 'viewlapse-webcam' ); ?></p></td>
+					</tr>
+					<tr>
 						<th scope="row"><label for="vl-tiles"><?php esc_html_e( 'Mappa', 'viewlapse-webcam' ); ?></label></th>
 						<td><input type="text" class="large-text code" id="vl-tiles" name="<?php echo esc_attr( $o ); ?>[tiles_url]" value="<?php echo esc_attr( (string) $s['tiles_url'] ); ?>">
 						<p class="description"><?php esc_html_e( 'URL delle tessere della mappa (Leaflet è incluso nel plugin e si carica solo nei blocchi con la mappa attiva).', 'viewlapse-webcam' ); ?></p>
@@ -175,6 +202,10 @@ final class Admin {
 				<li><code>[viewlapse_confronto webcam="monte-cavo" a="2026-08-21T12:00" b="" scegli="si"]</code></li>
 				<li><code>[viewlapse_grafico webcam="monte-cavo" giorni="7"]</code></li>
 				<li><code>[viewlapse_elenco mappa="si" link="/webcam/?vl_cam={slug}"]</code></li>
+				<li><code>[viewlapse_timelapse webcam="monte-cavo" tipo="giorno" formato="verticale"]</code></li>
+				<li><code>[viewlapse_momento webcam="monte-cavo" ora="12:00" giorni="30" vista="sfoglia"]</code></li>
+				<li><code>[viewlapse_fotogiorno webcam="monte-cavo" social="si"]</code></li>
+				<li><code>[viewlapse_statistiche]</code>, <code>[viewlapse_documenti]</code> <?php esc_html_e( '(solo con la chiave "client", nell\'area riservata)', 'viewlapse-webcam' ); ?></li>
 			</ul>
 		</div>
 		<?php
@@ -199,6 +230,14 @@ final class Admin {
 			$count = is_wp_error( $list ) ? 0 : (int) ( $list['count'] ?? 0 );
 			$scope = (string) ( $who['scope'] ?? '' );
 			$cust  = is_array( $who['customer'] ?? null ) ? (string) $who['customer']['name'] : __( 'nessuno', 'viewlapse-webcam' );
+			$first = is_wp_error( $list ) ? array() : (array) ( $list['webcams'][0] ?? array() );
+			$v11   = isset( $who['server'] ) || isset( $first['features'] );
+			$extra = '<br>' . ( $v11
+				? esc_html__( 'API dei siti 1.1: timelapse, stesso momento, foto del giorno e statistiche secondo il servizio di ogni webcam.', 'viewlapse-webcam' )
+				: esc_html__( 'API dei siti 1.0: i blocchi dei servizi (timelapse, stesso momento, foto del giorno, statistiche, documenti) restano nascosti finché il portal non viene aggiornato.', 'viewlapse-webcam' ) );
+			if ( is_array( $who['server'] ?? null ) && isset( $who['server']['timelapse'] ) && ! $who['server']['timelapse'] ) {
+				$extra .= '<br>' . esc_html__( 'Il portal non produce timelapse nuovi (ffmpeg mancante): si vedono quelli già pronti.', 'viewlapse-webcam' );
+			}
 			$msg   = array(
 				'type' => 'ok',
 				'text' => sprintf(
@@ -207,7 +246,7 @@ final class Admin {
 					'<strong>' . esc_html( 'anon' === $scope ? __( 'senza chiave', 'viewlapse-webcam' ) : $scope ) . '</strong>',
 					'<strong>' . esc_html( $cust ) . '</strong>',
 					$count
-				),
+				) . $extra,
 			);
 		}
 		self::back( $msg );

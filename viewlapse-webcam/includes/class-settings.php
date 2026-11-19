@@ -32,6 +32,8 @@ final class Settings {
 			'ttl_current'       => 60,
 			'ttl_archive'       => 6 * HOUR_IN_SECONDS,
 			'timeout'           => 8,
+			'beacon'            => 1,
+			'missing_feature'   => 'message',
 			'tiles_url'         => 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
 			'tiles_attribution' => '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 		);
@@ -101,6 +103,8 @@ final class Settings {
 		$out['ttl_current'] = max( 30, min( 3600, absint( $in['ttl_current'] ?? $d['ttl_current'] ) ) );
 		$out['ttl_archive'] = max( 300, min( 2 * DAY_IN_SECONDS, absint( $in['ttl_archive'] ?? $d['ttl_archive'] ) ) );
 		$out['timeout']     = max( 2, min( 30, absint( $in['timeout'] ?? $d['timeout'] ) ) );
+		$out['beacon']      = empty( $in['beacon'] ) ? 0 : 1;
+		$out['missing_feature'] = ( isset( $in['missing_feature'] ) && 'hide' === $in['missing_feature'] ) ? 'hide' : 'message';
 
 		$tiles = isset( $in['tiles_url'] ) ? trim( (string) $in['tiles_url'] ) : '';
 		// I segnaposto {z}/{x}/{y}/{s} non sono validi per esc_url_raw: si controllano a parte.

@@ -31,14 +31,24 @@ final class Api {
 	public const ERROR_TTL = 30;
 
 	/**
+	 * Errori definitivi: non si ripiega sulla copia vecchia (webcam non
+	 * visibile, parametro sbagliato, funzione non nel listino, scope).
+	 */
+	public const FINAL_ERRORS = array( 'not_found', 'vl_invalid_param', 'feature_unavailable', 'scope_client_required' );
+
+	/** Copia vecchia massima per gli elenchi dei documenti (URL firmati validi circa un giorno). */
+	public const STALE_DOCS = 6 * HOUR_IN_SECONDS;
+
+	/**
 	 * Chiamata GET con cache.
 	 *
 	 * @param string               $path  Percorso dopo /api/site/v1/ (es. "webcams/monte-cavo").
 	 * @param array<string, mixed> $query Parametri.
 	 * @param int                  $ttl   Secondi di cache.
+	 * @param int                  $stale_max Per quanto si usa la copia vecchia se il portal non risponde.
 	 * @return array<string, mixed>|WP_Error
 	 */
-	public static function get( string $path, array $query = array(), int $ttl = 60 ) {
+	public static function get( string $path, array $query = array(), int $ttl = 60, int $stale_max = self::STALE ) {
 		$s   = Settings::get();
 		$url = self::url( $s, $path, $query );
 		if ( '' === $url ) {
@@ -56,7 +66,7 @@ final class Api {
 				return $cached['d'];
 			}
 		}
-		$stale = ( is_array( $cached ) && isset( $cached['d'] ) ) ? $cached['d'] : null;
+		$stale = ( is_array( $cached ) && isset( $cached['d'] ) && $now - $cached['t'] < $ttl + $stale_max ) ? $cached['d'] : null;
 
 		$backoff = get_transient( self::PREFIX . 'backoff' );
 		if ( $backoff && null !== $stale ) {
@@ -67,7 +77,7 @@ final class Api {
 		if ( is_wp_error( $res ) ) {
 			$code = (string) $res->get_error_code();
 			// Un 404 è una risposta definitiva (webcam non visibile): non si ripiega sulla copia vecchia.
-			if ( null !== $stale && 'not_found' !== $code && 'vl_invalid_param' !== $code ) {
+			if ( null !== $stale && ! in_array( $code, self::FINAL_ERRORS, true ) ) {
 				return $stale;
 			}
 			$data = $res->get_error_data();
@@ -91,7 +101,7 @@ final class Api {
 				't' => $now,
 				'd' => $res,
 			),
-			$ttl + self::STALE
+			$ttl + $stale_max
 		);
 		return $res;
 	}
@@ -298,5 +308,150 @@ final class Api {
 			),
 			$ttl
 		);
+	}
+
+	// ------------------------------------------------------------ servizi (API dei siti 1.1)
+
+	/**
+	 * Scope della chiave del sito (anon, public, client), dalla cache di whoami.
+	 */
+	public static function scope(): string {
+		$r = self::get( 'whoami', array(), 10 * MINUTE_IN_SECONDS );
+		return is_wp_error( $r ) ? '' : (string) ( $r['scope'] ?? '' );
+	}
+
+	/**
+	 * Timelapse pronti.
+	 *
+	 * @param string      $slug   Slug.
+	 * @param string|null $kind   day, week, month, custom, final (anche separati da virgola), null = tutti.
+	 * @param string|null $format landscape, portrait, null = tutti.
+	 * @param int         $limit  1-200.
+	 * @return array<string, mixed>|WP_Error
+	 */
+	public static function timelapses( string $slug, ?string $kind, ?string $format, int $limit = 50 ) {
+		return self::get(
+			'webcams/' . $slug . '/timelapses',
+			array(
+				'kind'   => $kind,
+				'format' => $format,
+				'limit'  => max( 1, min( 200, $limit ) ),
+			),
+			10 * MINUTE_IN_SECONDS
+		);
+	}
+
+	/**
+	 * Stesso momento in giorni diversi.
+	 *
+	 * @param string $slug Slug.
+	 * @param string $time HH:MM locale.
+	 * @param string $from AAAA-MM-GG.
+	 * @param string $to   AAAA-MM-GG.
+	 * @param string $step day, week, month, year.
+	 * @param bool   $good Preferire le foto buone.
+	 * @param bool   $past L'intervallo è tutto nel passato (cache lunga).
+	 * @return array<string, mixed>|WP_Error
+	 */
+	public static function same_moment( string $slug, string $time, string $from, string $to, string $step, bool $good, bool $past ) {
+		return self::get(
+			'webcams/' . $slug . '/same-moment',
+			array(
+				'time' => $time,
+				'from' => $from,
+				'to'   => $to,
+				'step' => $step,
+				'good' => $good ? 1 : 0,
+			),
+			$past ? (int) Settings::value( 'ttl_archive' ) : 10 * MINUTE_IN_SECONDS
+		);
+	}
+
+	/**
+	 * Foto del giorno (con i formati per i social).
+	 *
+	 * @param string      $slug Slug.
+	 * @param string|null $date AAAA-MM-GG, null = quella del portal (oggi se scelta, altrimenti ieri).
+	 * @param bool        $old  Giorno di almeno due giorni fa (non cambia più).
+	 * @return array<string, mixed>|WP_Error
+	 */
+	public static function photo_of_day( string $slug, ?string $date, bool $old = false ) {
+		return self::get( 'webcams/' . $slug . '/photo-of-day', array( 'date' => $date ), $old ? (int) Settings::value( 'ttl_archive' ) : 10 * MINUTE_IN_SECONDS );
+	}
+
+	/**
+	 * Foto del giorno di un mese.
+	 *
+	 * @param string $slug    Slug.
+	 * @param string $month   AAAA-MM.
+	 * @param bool   $current Mese in corso.
+	 * @return array<string, mixed>|WP_Error
+	 */
+	public static function photos_of_day( string $slug, string $month, bool $current ) {
+		return self::get( 'webcams/' . $slug . '/photos-of-day', array( 'month' => $month ), $current ? 30 * MINUTE_IN_SECONDS : (int) Settings::value( 'ttl_archive' ) );
+	}
+
+	/**
+	 * Sponsor e infopoint attivi.
+	 *
+	 * @param string $slug Slug.
+	 * @return array<string, mixed>|WP_Error
+	 */
+	public static function overlay_items( string $slug ) {
+		return self::get( 'webcams/' . $slug . '/overlay-items', array(), 10 * MINUTE_IN_SECONDS );
+	}
+
+	/**
+	 * Statistiche di visualizzazione (solo scope client).
+	 *
+	 * @param string $slug  Slug.
+	 * @param string $from  AAAA-MM-GG.
+	 * @param string $to    AAAA-MM-GG.
+	 * @param string $group day o month.
+	 * @return array<string, mixed>|WP_Error
+	 */
+	public static function stats( string $slug, string $from, string $to, string $group ) {
+		return self::get(
+			'webcams/' . $slug . '/stats',
+			array(
+				'from'  => $from,
+				'to'    => $to,
+				'group' => $group,
+			),
+			10 * MINUTE_IN_SECONDS
+		);
+	}
+
+	/**
+	 * Rapporti mensili di un anno (solo scope client). URL dei PDF validi circa un giorno.
+	 *
+	 * @param string $slug Slug.
+	 * @param int    $year Anno.
+	 * @return array<string, mixed>|WP_Error
+	 */
+	public static function reports( string $slug, int $year ) {
+		return self::get( 'webcams/' . $slug . '/reports', array( 'year' => $year ), 10 * MINUTE_IN_SECONDS, self::STALE_DOCS );
+	}
+
+	/**
+	 * Certificati di maltempo di un anno (solo scope client).
+	 *
+	 * @param string $slug Slug.
+	 * @param int    $year Anno.
+	 * @return array<string, mixed>|WP_Error
+	 */
+	public static function certificates( string $slug, int $year ) {
+		return self::get( 'webcams/' . $slug . '/certificates', array( 'year' => $year ), 10 * MINUTE_IN_SECONDS, self::STALE_DOCS );
+	}
+
+	/**
+	 * Registro giornaliero e giornate di maltempo di un mese (solo scope client).
+	 *
+	 * @param string $slug  Slug.
+	 * @param string $month AAAA-MM.
+	 * @return array<string, mixed>|WP_Error
+	 */
+	public static function weather_days( string $slug, string $month ) {
+		return self::get( 'webcams/' . $slug . '/weather-days', array( 'month' => $month ), 10 * MINUTE_IN_SECONDS, self::STALE_DOCS );
 	}
 }

@@ -37,17 +37,11 @@ final class Rest {
 				'callback'            => array( self::class, 'render' ),
 				'permission_callback' => array( self::class, 'can_render' ),
 				'args'                => array(
-					'ctx'       => array(
+					'ctx' => array(
 						'type'     => 'string',
 						'required' => true,
 					),
-					'vl_cam'    => array( 'type' => 'string' ),
-					'vl_date'   => array( 'type' => 'string' ),
-					'vl_month'  => array( 'type' => 'string' ),
-					'vl_a'      => array( 'type' => 'string' ),
-					'vl_b'      => array( 'type' => 'string' ),
-					'vl_giorni' => array( 'type' => 'string' ),
-				),
+				) + array_fill_keys( Render::PARAMS, array( 'type' => 'string' ) ),
 			)
 		);
 		register_rest_route(
@@ -93,7 +87,7 @@ final class Rest {
 	public static function render( WP_REST_Request $req ): WP_REST_Response {
 		$ctx    = (array) Context::verify( (string) $req->get_param( 'ctx' ) );
 		$params = array();
-		foreach ( array( 'vl_cam', 'vl_date', 'vl_month', 'vl_a', 'vl_b', 'vl_giorni' ) as $k ) {
+		foreach ( Render::PARAMS as $k ) {
 			$v = $req->get_param( $k );
 			if ( is_string( $v ) ) {
 				$params[ $k ] = $v;

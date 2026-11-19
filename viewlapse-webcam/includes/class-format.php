@@ -76,8 +76,50 @@ final class Format {
 			'offline'       => __( 'Non in linea', 'viewlapse-webcam' ),
 			'never'         => __( 'Mai collegata', 'viewlapse-webcam' ),
 			'not_installed' => __( 'Da installare', 'viewlapse-webcam' ),
+			'archived'      => __( 'Archivio', 'viewlapse-webcam' ),
 		);
 		return $labels[ $state ] ?? __( 'Stato sconosciuto', 'viewlapse-webcam' );
+	}
+
+	/**
+	 * Dimensione di un file leggibile (MB o kB).
+	 *
+	 * @param mixed $bytes Byte.
+	 */
+	public static function bytes( $bytes ): string {
+		$b = (int) $bytes;
+		if ( $b <= 0 ) {
+			return '';
+		}
+		return $b >= 1048576 ? number_format_i18n( $b / 1048576, 1 ) . "\u{00A0}MB" : number_format_i18n( max( 1, $b / 1024 ), 0 ) . "\u{00A0}kB";
+	}
+
+	/**
+	 * Durata in secondi leggibile (8 s, 1 min 05 s, 2 h 10 min).
+	 *
+	 * @param mixed $seconds Secondi.
+	 */
+	public static function duration( $seconds ): string {
+		$s = (int) round( (float) $seconds );
+		if ( $s < 60 ) {
+			return $s . "\u{00A0}s";
+		}
+		if ( $s < 3600 ) {
+			return sprintf( '%d min %02d s', intdiv( $s, 60 ), $s % 60 );
+		}
+		return sprintf( '%d h %02d min', intdiv( $s, 3600 ), intdiv( $s % 3600, 60 ) );
+	}
+
+	/**
+	 * Ora locale HH:MM valida.
+	 *
+	 * @param mixed $v Valore.
+	 */
+	public static function valid_time( $v ): ?string {
+		if ( ! is_string( $v ) || ! preg_match( '/^(\d{1,2}):(\d{2})$/', trim( $v ), $m ) || (int) $m[1] > 23 || (int) $m[2] > 59 ) {
+			return null;
+		}
+		return sprintf( '%02d:%02d', (int) $m[1], (int) $m[2] );
 	}
 
 	/**

@@ -1,0 +1,51 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "viewlapse/documenti",
+    "version": "1.1.0",
+    "title": "Webcam: rapporti e certificati",
+    "category": "viewlapse",
+    "icon": "media-document",
+    "description": "Rapporti mensili, certificati di maltempo e registro giornaliero da scaricare (solo area riservata del cliente).",
+    "keywords": [
+        "webcam",
+        "rapporto",
+        "certificato",
+        "maltempo"
+    ],
+    "textdomain": "viewlapse-webcam",
+    "attributes": {
+        "webcam": {
+            "type": "string",
+            "default": ""
+        },
+        "scelta": {
+            "type": "boolean",
+            "default": false
+        },
+        "rapporti": {
+            "type": "boolean",
+            "default": true
+        },
+        "certificati": {
+            "type": "boolean",
+            "default": true
+        },
+        "registro": {
+            "type": "boolean",
+            "default": true
+        }
+    },
+    "supports": {
+        "html": false,
+        "align": [
+            "wide",
+            "full"
+        ],
+        "spacing": {
+            "margin": true
+        }
+    },
+    "editorScript": "viewlapse-webcam-editor",
+    "style": "viewlapse-webcam"
+}

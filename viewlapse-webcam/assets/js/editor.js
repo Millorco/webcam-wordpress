@@ -97,6 +97,66 @@
 			[ 'mappa', 'toggle', __( 'Mostra la mappa (Leaflet)', 'viewlapse-webcam' ) ],
 			[ 'altezza', 'range', __( 'Altezza della mappa', 'viewlapse-webcam' ), { min: 200, max: 900 } ],
 		],
+		timelapse: [
+			[ 'webcam', 'webcam' ],
+			[ 'scelta', 'toggle', __( 'Il visitatore sceglie la webcam', 'viewlapse-webcam' ) ],
+			[ 'tipo', 'select', __( 'Timelapse', 'viewlapse-webcam' ), [
+				{ value: 'tutti', label: __( 'Il più recente (con le schede per tipo)', 'viewlapse-webcam' ) },
+				{ value: 'giorno', label: __( 'Del giorno', 'viewlapse-webcam' ) },
+				{ value: 'settimana', label: __( 'Della settimana', 'viewlapse-webcam' ) },
+				{ value: 'mese', label: __( 'Del mese', 'viewlapse-webcam' ) },
+				{ value: 'periodo', label: __( 'Periodi scelti (solo area riservata)', 'viewlapse-webcam' ) },
+				{ value: 'finale', label: __( 'Filmato finale (solo area riservata)', 'viewlapse-webcam' ) },
+			] ],
+			[ 'formato', 'select', __( 'Formato', 'viewlapse-webcam' ), [
+				{ value: 'tutti', label: __( 'Orizzontali e verticali', 'viewlapse-webcam' ) },
+				{ value: 'orizzontale', label: __( 'Orizzontale 16:9', 'viewlapse-webcam' ) },
+				{ value: 'verticale', label: __( 'Verticale 9:16', 'viewlapse-webcam' ) },
+			] ],
+			[ 'elenco', 'toggle', __( 'Elenco degli altri timelapse', 'viewlapse-webcam' ) ],
+			[ 'numero', 'range', __( 'Timelapse nell\'elenco', 'viewlapse-webcam' ), { min: 2, max: 50 } ],
+			[ 'automatico', 'toggle', __( 'Avvio automatico, senza audio, in ciclo', 'viewlapse-webcam' ) ],
+		],
+		momento: [
+			[ 'webcam', 'webcam' ],
+			[ 'scelta', 'toggle', __( 'Il visitatore sceglie la webcam', 'viewlapse-webcam' ) ],
+			[ 'ora', 'text', __( 'Ora (HH:MM, fuso della webcam)', 'viewlapse-webcam' ) ],
+			[ 'passo', 'select', __( 'Una foto ogni', 'viewlapse-webcam' ), [
+				{ value: 'giorno', label: __( 'giorno', 'viewlapse-webcam' ) },
+				{ value: 'settimana', label: __( 'settimana', 'viewlapse-webcam' ) },
+				{ value: 'mese', label: __( 'mese', 'viewlapse-webcam' ) },
+				{ value: 'anno', label: __( 'anno', 'viewlapse-webcam' ) },
+			] ],
+			[ 'giorni', 'number', __( 'Periodo (giorni fino a oggi)', 'viewlapse-webcam' ), { min: 1, max: 3660 } ],
+			[ 'buone', 'toggle', __( 'Preferisci le foto buone (senza nebbia, gocce, controluce)', 'viewlapse-webcam' ) ],
+			[ 'vista', 'select', __( 'Vista', 'viewlapse-webcam' ), [
+				{ value: 'griglia', label: __( 'Griglia', 'viewlapse-webcam' ) },
+				{ value: 'sfoglia', label: __( 'Sfoglia con il cursore', 'viewlapse-webcam' ) },
+			] ],
+			[ 'colonne', 'range', __( 'Colonne della griglia', 'viewlapse-webcam' ), { min: 1, max: 8 } ],
+			[ 'scegli', 'toggle', __( 'Il visitatore sceglie ora, passo e periodo', 'viewlapse-webcam' ) ],
+		],
+		fotogiorno: [
+			[ 'webcam', 'webcam' ],
+			[ 'scelta', 'toggle', __( 'Il visitatore sceglie la webcam', 'viewlapse-webcam' ) ],
+			[ 'dimensione', 'select', __( 'Dimensione massima', 'viewlapse-webcam' ), SIZE_OPTIONS ],
+			[ 'social', 'toggle', __( 'Link ai formati per i social (quadrato, verticale, storia)', 'viewlapse-webcam' ) ],
+			[ 'mese', 'toggle', __( 'Foto del giorno del mese', 'viewlapse-webcam' ) ],
+		],
+		statistiche: [
+			[ 'webcam', 'webcam' ],
+			[ 'scelta', 'toggle', __( 'Il visitatore sceglie la webcam', 'viewlapse-webcam' ) ],
+			[ 'giorni', 'number', __( 'Giorni', 'viewlapse-webcam' ), { min: 1, max: 400 } ],
+			[ 'scegli', 'toggle', __( 'Il visitatore sceglie il periodo', 'viewlapse-webcam' ) ],
+			[ 'altezza', 'range', __( 'Altezza del grafico', 'viewlapse-webcam' ), { min: 140, max: 500 } ],
+		],
+		documenti: [
+			[ 'webcam', 'webcam' ],
+			[ 'scelta', 'toggle', __( 'Il visitatore sceglie la webcam', 'viewlapse-webcam' ) ],
+			[ 'rapporti', 'toggle', __( 'Rapporti mensili', 'viewlapse-webcam' ) ],
+			[ 'certificati', 'toggle', __( 'Certificati di maltempo', 'viewlapse-webcam' ) ],
+			[ 'registro', 'toggle', __( 'Registro giornaliero e giornate di maltempo', 'viewlapse-webcam' ) ],
+		],
 	};
 
 	function control( spec, attrs, set ) {

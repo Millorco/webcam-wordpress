@@ -75,6 +75,8 @@ final class Plugin {
 					'next'     => __( 'Foto successiva', 'viewlapse-webcam' ),
 					'download' => __( 'Scarica l\'originale', 'viewlapse-webcam' ),
 					'error'    => __( 'Aggiornamento non riuscito', 'viewlapse-webcam' ),
+					'play'     => __( 'Riproduci', 'viewlapse-webcam' ),
+					'pause'    => __( 'Pausa', 'viewlapse-webcam' ),
 				),
 			)
 		);

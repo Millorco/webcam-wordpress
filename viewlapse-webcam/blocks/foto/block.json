@@ -2,7 +2,7 @@
     "$schema": "https://schemas.wp.org/trunk/block.json",
     "apiVersion": 3,
     "name": "viewlapse/foto",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "title": "Webcam: foto attuale",
     "category": "viewlapse",
     "icon": "camera",
@@ -43,6 +43,10 @@
             "default": true
         },
         "titolo": {
+            "type": "boolean",
+            "default": true
+        },
+        "sponsor": {
             "type": "boolean",
             "default": true
         }

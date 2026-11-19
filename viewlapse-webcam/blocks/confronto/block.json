@@ -2,7 +2,7 @@
     "$schema": "https://schemas.wp.org/trunk/block.json",
     "apiVersion": 3,
     "name": "viewlapse/confronto",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "title": "Webcam: prima e dopo",
     "category": "viewlapse",
     "icon": "image-flip-horizontal",
