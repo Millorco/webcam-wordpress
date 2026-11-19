@@ -1,0 +1,50 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "viewlapse/elenco",
+    "version": "1.0.0",
+    "title": "Webcam: elenco e mappa",
+    "category": "viewlapse",
+    "icon": "location-alt",
+    "description": "Elenco delle webcam con ultima foto e stato, con mappa facoltativa.",
+    "keywords": [
+        "webcam",
+        "mappa",
+        "elenco"
+    ],
+    "textdomain": "viewlapse-webcam",
+    "attributes": {
+        "mappa": {
+            "type": "boolean",
+            "default": false
+        },
+        "foto": {
+            "type": "boolean",
+            "default": true
+        },
+        "colonne": {
+            "type": "integer",
+            "default": 3
+        },
+        "link": {
+            "type": "string",
+            "default": ""
+        },
+        "altezza": {
+            "type": "integer",
+            "default": 360
+        }
+    },
+    "supports": {
+        "html": false,
+        "align": [
+            "wide",
+            "full"
+        ],
+        "spacing": {
+            "margin": true
+        }
+    },
+    "editorScript": "viewlapse-webcam-editor",
+    "style": "viewlapse-webcam"
+}

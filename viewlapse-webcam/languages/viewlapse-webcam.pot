@@ -1,0 +1,496 @@
+# Copyright (C) 2026 Viewlapse
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Viewlapse Webcam 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/viewlapse-webcam\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-11-19T13:44:52+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: viewlapse-webcam\n"
+
+#. Plugin Name of the plugin
+#: viewlapse-webcam.php
+#: includes/class-admin.php:43
+#: includes/class-admin.php:93
+#: includes/class-blocks.php:46
+msgid "Viewlapse Webcam"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: viewlapse-webcam.php
+msgid "https://github.com/Millorco/webcam-wordpress"
+msgstr ""
+
+#. Description of the plugin
+#: viewlapse-webcam.php
+msgid "Mostra le webcam time-lapse Viewlapse (foto attuale, archivio, prima/dopo, grafico, elenco e mappa) con blocchi e shortcode. Le foto restano sul portal Viewlapse."
+msgstr ""
+
+#. Author of the plugin
+#: viewlapse-webcam.php
+msgid "Viewlapse"
+msgstr ""
+
+#: includes/class-admin.php:53
+#: assets/js/editor.js:138
+msgid "Impostazioni"
+msgstr ""
+
+#: includes/class-admin.php:104
+msgid "Il plugin legge le webcam dal portal Viewlapse con l'API dei siti. Le chiamate partono da questo server: la chiave non arriva mai al browser dei visitatori. Senza chiave si vedono solo le webcam pubbliche."
+msgstr ""
+
+#: includes/class-admin.php:106
+msgid "Portal e chiave di questo sito sono gestiti dall'amministratore della rete."
+msgstr ""
+
+#: includes/class-admin.php:112
+msgid "Indirizzo del portal"
+msgstr ""
+
+#: includes/class-admin.php:114
+msgid "Senza barra finale e senza /api."
+msgstr ""
+
+#: includes/class-admin.php:117
+msgid "Chiave API del sito"
+msgstr ""
+
+#. translators: %s: inizio della chiave
+#: includes/class-admin.php:126
+msgid "Chiave impostata: %s (lasciare vuoto per non cambiarla)."
+msgstr ""
+
+#: includes/class-admin.php:128
+msgid "Facoltativa: senza chiave solo le webcam pubbliche. Usare una chiave \"public\" del cliente (o \"client\" solo se il sito è riservato)."
+msgstr ""
+
+#: includes/class-admin.php:133
+msgid "Rimuovi la chiave"
+msgstr ""
+
+#: includes/class-admin.php:138
+msgid "Aggiornamento della foto"
+msgstr ""
+
+#: includes/class-admin.php:139
+msgid "minuti (0 = mai; predefinito dei blocchi)"
+msgstr ""
+
+#: includes/class-admin.php:142
+msgid "Cache"
+msgstr ""
+
+#: includes/class-admin.php:144
+msgid "secondi per la foto attuale e l'elenco"
+msgstr ""
+
+#: includes/class-admin.php:145
+msgid "secondi per l'archivio dei giorni passati"
+msgstr ""
+
+#: includes/class-admin.php:146
+msgid "secondi di attesa massima del portal"
+msgstr ""
+
+#: includes/class-admin.php:150
+msgid "Mappa"
+msgstr ""
+
+#: includes/class-admin.php:152
+msgid "URL delle tessere della mappa (Leaflet è incluso nel plugin e si carica solo nei blocchi con la mappa attiva)."
+msgstr ""
+
+#: includes/class-admin.php:154
+msgid "Attribuzione delle tessere (obbligatoria per OpenStreetMap)."
+msgstr ""
+
+#: includes/class-admin.php:163
+msgid "Prova connessione"
+msgstr ""
+
+#: includes/class-admin.php:168
+msgid "Svuota la cache"
+msgstr ""
+
+#: includes/class-admin.php:170
+msgid "Blocchi e shortcode"
+msgstr ""
+
+#: includes/class-admin.php:171
+msgid "Nell'editor: categoria \"Viewlapse Webcam\". Shortcode equivalenti:"
+msgstr ""
+
+#: includes/class-admin.php:188
+#: includes/class-admin.php:221
+msgid "Permesso negato."
+msgstr ""
+
+#: includes/class-admin.php:201
+msgid "nessuno"
+msgstr ""
+
+#. translators: 1: scope, 2: cliente, 3: numero di webcam
+#: includes/class-admin.php:206
+msgid "Connessione riuscita. Accesso: %1$s, cliente: %2$s, webcam visibili: %3$d."
+msgstr ""
+
+#: includes/class-admin.php:207
+msgid "senza chiave"
+msgstr ""
+
+#: includes/class-admin.php:228
+msgid "Cache svuotata."
+msgstr ""
+
+#: includes/class-api.php:45
+#: includes/class-api.php:110
+msgid "Impostare l'indirizzo del portal Viewlapse."
+msgstr ""
+
+#: includes/class-api.php:159
+msgid "Il portal Viewlapse non risponde."
+msgstr ""
+
+#. translators: %d: codice HTTP
+#: includes/class-api.php:171
+msgid "Risposta inattesa dal portal (HTTP %d)."
+msgstr ""
+
+#: includes/class-chart.php:65
+#: includes/class-render.php:310
+#: assets/js/editor.js:64
+msgid "Temperatura e umidità esterne"
+msgstr ""
+
+#: includes/class-chart.php:116
+msgid "Nessuna misura in questo periodo"
+msgstr ""
+
+#: includes/class-chart.php:132
+msgid "Nessuna misura."
+msgstr ""
+
+#. translators: 1: minima, 2: massima
+#: includes/class-chart.php:138
+msgid "Temperatura media oraria tra %1$s e %2$s."
+msgstr ""
+
+#. translators: 1: minima, 2: massima
+#: includes/class-chart.php:142
+msgid "Umidità tra %1$s e %2$s."
+msgstr ""
+
+#. translators: %s: data e ora
+#: includes/class-chart.php:145
+msgid "Ultimo dato: %s."
+msgstr ""
+
+#: includes/class-format.php:73
+msgid "In linea"
+msgstr ""
+
+#: includes/class-format.php:74
+msgid "In manutenzione"
+msgstr ""
+
+#: includes/class-format.php:75
+msgid "In ritardo"
+msgstr ""
+
+#: includes/class-format.php:76
+msgid "Non in linea"
+msgstr ""
+
+#: includes/class-format.php:77
+msgid "Mai collegata"
+msgstr ""
+
+#: includes/class-format.php:78
+msgid "Da installare"
+msgstr ""
+
+#: includes/class-format.php:80
+msgid "Stato sconosciuto"
+msgstr ""
+
+#: includes/class-plugin.php:73
+msgid "Chiudi"
+msgstr ""
+
+#: includes/class-plugin.php:74
+msgid "Foto precedente"
+msgstr ""
+
+#: includes/class-plugin.php:75
+msgid "Foto successiva"
+msgstr ""
+
+#: includes/class-plugin.php:76
+#: includes/class-render.php:314
+msgid "Scarica l'originale"
+msgstr ""
+
+#: includes/class-plugin.php:77
+msgid "Aggiornamento non riuscito"
+msgstr ""
+
+#: includes/class-render.php:148
+msgid "Webcam non disponibile al momento."
+msgstr ""
+
+#: includes/class-render.php:154
+#: includes/class-render.php:192
+msgid "Webcam non trovata."
+msgstr ""
+
+#: includes/class-render.php:184
+#: includes/class-render.php:608
+msgid "Nessuna webcam disponibile."
+msgstr ""
+
+#: includes/class-render.php:206
+#: assets/js/editor.js:41
+msgid "Webcam"
+msgstr ""
+
+#: includes/class-render.php:211
+msgid "Mostra"
+msgstr ""
+
+#. translators: 1: nome della webcam, 2: data e ora
+#: includes/class-render.php:287
+msgid "Webcam %1$s, foto del %2$s"
+msgstr ""
+
+#: includes/class-render.php:290
+msgid "Nessuna foto disponibile."
+msgstr ""
+
+#: includes/class-render.php:339
+#: includes/class-render.php:481
+msgid "L'archivio è ancora vuoto."
+msgstr ""
+
+#. translators: %s: numero di foto
+#: includes/class-render.php:363
+msgid "%s foto"
+msgid_plural "%s foto"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-render.php:368
+msgid "Nessuna foto in questo giorno."
+msgstr ""
+
+#. translators: %s: ora
+#: includes/class-render.php:382
+msgid "Foto delle %s"
+msgstr ""
+
+#: includes/class-render.php:423
+msgid "Mese precedente"
+msgstr ""
+
+#: includes/class-render.php:427
+msgid "Mese successivo"
+msgstr ""
+
+#. translators: 1: data, 2: numero di foto
+#: includes/class-render.php:450
+msgid "%1$s, %2$s foto"
+msgid_plural "%1$s, %2$s foto"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-render.php:503
+msgid "Prima"
+msgstr ""
+
+#: includes/class-render.php:504
+msgid "Dopo"
+msgstr ""
+
+#: includes/class-render.php:508
+msgid "Confronta"
+msgstr ""
+
+#: includes/class-render.php:516
+msgid "Nessuna foto vicina alle date scelte."
+msgstr ""
+
+#. translators: %s: data e ora
+#: includes/class-render.php:523
+msgid "Prima: %s"
+msgstr ""
+
+#. translators: %s: data e ora
+#: includes/class-render.php:525
+msgid "Dopo: %s"
+msgstr ""
+
+#: includes/class-render.php:529
+msgid "Sposta il cursore tra prima e dopo"
+msgstr ""
+
+#: includes/class-render.php:568
+msgid "Periodo"
+msgstr ""
+
+#: includes/class-render.php:570
+msgid "24 ore"
+msgstr ""
+
+#: includes/class-render.php:571
+msgid "48 ore"
+msgstr ""
+
+#: includes/class-render.php:572
+msgid "7 giorni"
+msgstr ""
+
+#: includes/class-render.php:573
+msgid "30 giorni"
+msgstr ""
+
+#: includes/class-render.php:586
+msgid "Temperatura esterna (media oraria, fascia minima–massima)"
+msgstr ""
+
+#: includes/class-render.php:589
+msgid "Umidità esterna"
+msgstr ""
+
+#: includes/class-render.php:625
+msgid "Nessuna foto"
+msgstr ""
+
+#: includes/class-render.php:661
+msgid "Mappa delle webcam"
+msgstr ""
+
+#: includes/class-rest.php:73
+msgid "Contesto non valido."
+msgstr ""
+
+#: includes/class-rest.php:83
+msgid "Accesso riservato."
+msgstr ""
+
+#: includes/class-settings.php:96
+msgid "La chiave non è valida: deve iniziare con vls_ ed essere lunga 47 caratteri. Non è stata salvata."
+msgstr ""
+
+#: assets/js/editor.js:33
+msgid "Prima disponibile"
+msgstr ""
+
+#: assets/js/editor.js:35
+msgid "(privata)"
+msgstr ""
+
+#: assets/js/editor.js:45
+msgid "Le webcam visibili con la chiave del sito."
+msgstr ""
+
+#: assets/js/editor.js:59
+#: assets/js/editor.js:69
+#: assets/js/editor.js:75
+#: assets/js/editor.js:83
+msgid "Il visitatore sceglie la webcam"
+msgstr ""
+
+#: assets/js/editor.js:60
+msgid "Aggiorna ogni (minuti, -1 = impostazione del sito, 0 = mai)"
+msgstr ""
+
+#: assets/js/editor.js:61
+#: assets/js/editor.js:79
+msgid "Dimensione massima"
+msgstr ""
+
+#: assets/js/editor.js:62
+msgid "Nome e località"
+msgstr ""
+
+#: assets/js/editor.js:63
+msgid "Data e ora della foto"
+msgstr ""
+
+#: assets/js/editor.js:65
+msgid "Stato in linea / non in linea"
+msgstr ""
+
+#: assets/js/editor.js:70
+msgid "Colonne della griglia"
+msgstr ""
+
+#: assets/js/editor.js:71
+msgid "Una foto ogni (minuti, 0 = tutte)"
+msgstr ""
+
+#: assets/js/editor.js:76
+msgid "Prima (AAAA-MM-GG o AAAA-MM-GGTHH:MM, vuoto = primo giorno)"
+msgstr ""
+
+#: assets/js/editor.js:77
+msgid "Dopo (vuoto = adesso)"
+msgstr ""
+
+#: assets/js/editor.js:78
+msgid "Il visitatore sceglie le date"
+msgstr ""
+
+#: assets/js/editor.js:84
+msgid "Giorni mostrati"
+msgstr ""
+
+#: assets/js/editor.js:85
+msgid "Misure"
+msgstr ""
+
+#: assets/js/editor.js:86
+msgid "Temperatura e umidità"
+msgstr ""
+
+#: assets/js/editor.js:87
+msgid "Solo temperatura"
+msgstr ""
+
+#: assets/js/editor.js:88
+msgid "Solo umidità"
+msgstr ""
+
+#: assets/js/editor.js:90
+msgid "Il visitatore sceglie il periodo"
+msgstr ""
+
+#: assets/js/editor.js:91
+msgid "Altezza"
+msgstr ""
+
+#: assets/js/editor.js:94
+msgid "Mostra l'ultima foto"
+msgstr ""
+
+#: assets/js/editor.js:95
+msgid "Colonne"
+msgstr ""
+
+#: assets/js/editor.js:96
+msgid "Link di ogni webcam ({slug} = nome della webcam), es. /webcam/?vl_cam={slug}"
+msgstr ""
+
+#: assets/js/editor.js:97
+msgid "Mostra la mappa (Leaflet)"
+msgstr ""
+
+#: assets/js/editor.js:98
+msgid "Altezza della mappa"
+msgstr ""

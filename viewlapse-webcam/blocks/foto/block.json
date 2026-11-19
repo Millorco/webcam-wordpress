@@ -1,0 +1,62 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "viewlapse/foto",
+    "version": "1.0.0",
+    "title": "Webcam: foto attuale",
+    "category": "viewlapse",
+    "icon": "camera",
+    "description": "Ultima foto della webcam, aggiornata in automatico, con stato e meteo.",
+    "keywords": [
+        "webcam",
+        "foto",
+        "time-lapse"
+    ],
+    "textdomain": "viewlapse-webcam",
+    "attributes": {
+        "webcam": {
+            "type": "string",
+            "default": ""
+        },
+        "scelta": {
+            "type": "boolean",
+            "default": false
+        },
+        "aggiorna": {
+            "type": "integer",
+            "default": -1
+        },
+        "dimensione": {
+            "type": "integer",
+            "default": 1920
+        },
+        "meteo": {
+            "type": "boolean",
+            "default": true
+        },
+        "stato": {
+            "type": "boolean",
+            "default": true
+        },
+        "ora": {
+            "type": "boolean",
+            "default": true
+        },
+        "titolo": {
+            "type": "boolean",
+            "default": true
+        }
+    },
+    "supports": {
+        "html": false,
+        "align": [
+            "wide",
+            "full"
+        ],
+        "spacing": {
+            "margin": true
+        }
+    },
+    "editorScript": "viewlapse-webcam-editor",
+    "style": "viewlapse-webcam"
+}
