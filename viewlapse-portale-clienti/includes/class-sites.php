@@ -20,6 +20,10 @@ final class Sites {
 	public const ROLE_DOWNLOAD = 'vl_cliente_download';
 	public const CAP_VIEW      = 'vl_view_webcam';
 	public const CAP_DOWNLOAD  = 'vl_download_original';
+	public const CAP_DOCS      = 'vl_download_documents';
+
+	/** Versione delle pagine e dei ruoli del sottosito (opzione del sito). */
+	public const OPTION_VERSION = 'vl_portale_version';
 
 	/**
 	 * Hook.
@@ -29,6 +33,36 @@ final class Sites {
 		add_filter( 'viewlapse_webcam_settings_locked', array( self::class, 'is_customer_site' ) );
 		add_filter( 'viewlapse_webcam_show_settings', static fn( $show ) => self::is_customer_site() ? is_super_admin() : $show );
 		add_action( 'init', array( self::class, 'ensure_roles' ) );
+		add_action( 'init', array( self::class, 'maybe_upgrade' ), 20 );
+		add_filter( 'viewlapse_webcam_can_download_docs', static fn( $can ) => self::is_customer_site() ? current_user_can( self::CAP_DOCS ) : $can );
+		add_filter( 'viewlapse_webcam_feature_message', array( self::class, 'feature_message' ) );
+		add_filter( 'viewlapse_webcam_docs_denied_message', static fn( $msg ) => self::is_customer_site() ? __( 'Per scaricare rapporti, certificati ed elenchi serve il ruolo "Cliente - download": chiedilo a chi gestisce gli utenti del sito.', 'viewlapse-portale-clienti' ) : $msg );
+	}
+
+	/**
+	 * Messaggio cortese per una funzione che non è nel servizio della webcam.
+	 *
+	 * @param string $msg Messaggio di Viewlapse Webcam.
+	 */
+	public static function feature_message( $msg ): string {
+		if ( ! self::is_customer_site() ) {
+			return (string) $msg;
+		}
+		return __( 'Questa funzione non è compresa nel servizio della tua webcam. Per aggiungerla contatta Viewlapse.', 'viewlapse-portale-clienti' );
+	}
+
+	/**
+	 * Aggiorna i sottositi creati con una versione precedente: ruoli con le
+	 * capacità nuove e pagine nuove (le pagine esistenti non si toccano).
+	 */
+	public static function maybe_upgrade(): void {
+		if ( ! self::is_customer_site() || version_compare( (string) get_option( self::OPTION_VERSION, '1.0.0' ), VIEWLAPSE_PORTALE_VERSION, '>=' ) ) {
+			return;
+		}
+		// Prima l'opzione, per non aggiungere le pagine due volte con richieste contemporanee.
+		update_option( self::OPTION_VERSION, VIEWLAPSE_PORTALE_VERSION );
+		self::roles();
+		self::add_pages( false );
 	}
 
 	/**
@@ -106,6 +140,7 @@ final class Sites {
 				'read'             => true,
 				self::CAP_VIEW     => true,
 				self::CAP_DOWNLOAD => true,
+				self::CAP_DOCS     => true,
 			)
 		);
 		foreach ( array( 'administrator', 'editor' ) as $r ) {
@@ -113,6 +148,7 @@ final class Sites {
 			if ( $role ) {
 				$role->add_cap( self::CAP_VIEW );
 				$role->add_cap( self::CAP_DOWNLOAD );
+				$role->add_cap( self::CAP_DOCS );
 			}
 		}
 	}
@@ -192,12 +228,37 @@ final class Sites {
 				wp_delete_post( $p->ID, true );
 			}
 		}
-		$pages = self::pages();
+		$ids = self::add_pages( true );
+		update_option( self::OPTION_VERSION, VIEWLAPSE_PORTALE_VERSION );
+		update_option( 'show_on_front', 'page' );
+		update_option( 'page_on_front', (int) $ids['webcam'] );
+		/* translators: %s: nome del cliente */
+		update_option( 'blogdescription', sprintf( __( 'Area riservata webcam di %s', 'viewlapse-portale-clienti' ), $title ) );
+		update_option( 'default_comment_status', 'closed' );
+		update_option( 'default_ping_status', 'closed' );
+		update_option( 'users_can_register', 0 );
+		update_option( 'permalink_structure', '/%postname%/' );
+		// Le regole si rigenerano alla prima richiesta del sito (flush_rewrite_rules non è affidabile dopo switch_to_blog).
+		delete_option( 'rewrite_rules' );
+	}
+
+	/**
+	 * Crea le pagine del portale nel sito corrente.
+	 *
+	 * @param bool $replace True: riscrive anche le pagine esistenti (creazione del sito); false: aggiunge solo quelle che mancano.
+	 * @return array<string, int> slug => id.
+	 */
+	public static function add_pages( bool $replace ): array {
 		$ids   = array();
 		$order = 1;
-		foreach ( $pages as $slug => [ $page_title, $content ] ) {
+		foreach ( self::pages() as $slug => [ $page_title, $content ] ) {
 			$existing = get_page_by_path( $slug );
-			$data     = array(
+			if ( $existing && ! $replace ) {
+				$ids[ $slug ] = (int) $existing->ID;
+				++$order;
+				continue;
+			}
+			$data = array(
 				'post_type'      => 'page',
 				'post_status'    => 'publish',
 				'post_name'      => $slug,
@@ -210,18 +271,9 @@ final class Sites {
 			if ( $existing ) {
 				$data['ID'] = $existing->ID;
 			}
-			$ids[ $slug ] = wp_insert_post( wp_slash( $data ) );
+			$ids[ $slug ] = (int) wp_insert_post( wp_slash( $data ) );
 		}
-		update_option( 'show_on_front', 'page' );
-		update_option( 'page_on_front', (int) $ids['webcam'] );
-		/* translators: %s: nome del cliente */
-		update_option( 'blogdescription', sprintf( __( 'Area riservata webcam di %s', 'viewlapse-portale-clienti' ), $title ) );
-		update_option( 'default_comment_status', 'closed' );
-		update_option( 'default_ping_status', 'closed' );
-		update_option( 'users_can_register', 0 );
-		update_option( 'permalink_structure', '/%postname%/' );
-		// Le regole si rigenerano alla prima richiesta del sito (flush_rewrite_rules non è affidabile dopo switch_to_blog).
-		delete_option( 'rewrite_rules' );
+		return $ids;
 	}
 
 	/**
@@ -248,6 +300,27 @@ final class Sites {
 			'dati'      => array(
 				__( 'Dati', 'viewlapse-portale-clienti' ),
 				'<!-- wp:viewlapse/grafico {"scelta":true,"giorni":7,"align":"wide"} /-->',
+			),
+			// 1.1: servizi del listino; ogni blocco mostra solo le funzioni della webcam.
+			'timelapse'      => array(
+				__( 'Timelapse', 'viewlapse-portale-clienti' ),
+				'<!-- wp:viewlapse/timelapse {"scelta":true,"align":"wide"} /-->',
+			),
+			'stesso-momento' => array(
+				__( 'Stesso momento', 'viewlapse-portale-clienti' ),
+				'<!-- wp:viewlapse/momento {"scelta":true,"vista":"sfoglia","align":"wide"} /-->',
+			),
+			'foto-del-giorno' => array(
+				__( 'Foto del giorno', 'viewlapse-portale-clienti' ),
+				'<!-- wp:viewlapse/fotogiorno {"scelta":true,"social":true,"align":"wide"} /-->',
+			),
+			'statistiche'    => array(
+				__( 'Statistiche', 'viewlapse-portale-clienti' ),
+				'<!-- wp:viewlapse/statistiche {"scelta":true,"align":"wide"} /-->',
+			),
+			'documenti'      => array(
+				__( 'Rapporti e certificati', 'viewlapse-portale-clienti' ),
+				'<!-- wp:viewlapse/documenti {"scelta":true,"align":"wide"} /-->',
 			),
 		);
 		/**

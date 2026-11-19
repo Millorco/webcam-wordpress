@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       Viewlapse Portale clienti
  * Plugin URI:        https://github.com/Millorco/webcam-wordpress
- * Description:       Un sottosito riservato per ogni cliente Viewlapse in WordPress Multisite: chiave del cliente per sito, pagine pronte (Webcam, Archivio, Confronto, Dati), logo e colori del cliente, ruoli "Cliente - visione" e "Cliente - download". Richiede Viewlapse Webcam.
- * Version:           1.0.0
+ * Description:       Un sottosito riservato per ogni cliente Viewlapse in WordPress Multisite: chiave del cliente per sito, pagine pronte (Webcam, Archivio, Confronto, Dati, Timelapse, Stesso momento, Foto del giorno, Statistiche, Rapporti e certificati), logo e colori del cliente, ruoli "Cliente - visione" e "Cliente - download". Richiede Viewlapse Webcam.
+ * Version:           1.1.0
  * Requires at least: 6.4
  * Requires PHP:      8.1
  * Requires Plugins:  viewlapse-webcam
@@ -19,7 +19,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'VIEWLAPSE_PORTALE_VERSION', '1.0.0' );
+define( 'VIEWLAPSE_PORTALE_VERSION', '1.1.0' );
 define( 'VIEWLAPSE_PORTALE_FILE', __FILE__ );
 define( 'VIEWLAPSE_PORTALE_DIR', __DIR__ );
 

@@ -295,15 +295,35 @@ final class Network {
 		if ( is_wp_error( $list ) ) {
 			self::back( 'error', esc_html( $list->get_error_message() ) );
 		}
-		$names = array_map( static fn( $w ) => (string) $w['name'], (array) ( $list['webcams'] ?? array() ) );
+		$names = array_map(
+			static function ( $w ): string {
+				$name = (string) $w['name'];
+				if ( 'archived' === ( $w['state'] ?? '' ) ) {
+					$name .= ' ' . __( '(archivio)', 'viewlapse-portale-clienti' );
+				}
+				// 1.1: funzioni del listino della webcam, come le manda il portal.
+				if ( isset( $w['features'] ) && is_array( $w['features'] ) ) {
+					$name .= ' [' . implode( ', ', array_map( 'strval', $w['features'] ) ) . ']';
+				}
+				return $name;
+			},
+			(array) ( $list['webcams'] ?? array() )
+		);
+		$first = (array) ( $list['webcams'][0] ?? array() );
+		$note  = '';
+		if ( ! isset( $who['server'] ) && ! isset( $first['features'] ) ) {
+			$note = ' ' . esc_html__( 'Il portal usa ancora l\'API dei siti 1.0: le pagine Timelapse, Stesso momento, Foto del giorno, Statistiche e Rapporti restano vuote per i clienti finché non viene aggiornato.', 'viewlapse-portale-clienti' );
+		} elseif ( is_array( $who['server'] ?? null ) && isset( $who['server']['timelapse'] ) && ! $who['server']['timelapse'] ) {
+			$note = ' ' . esc_html__( 'Il portal non produce timelapse nuovi (ffmpeg mancante).', 'viewlapse-portale-clienti' );
+		}
 		self::back(
 			'ok',
 			sprintf(
 				/* translators: 1: cliente, 2: elenco delle webcam */
 				esc_html__( 'Chiave valida per %1$s. Webcam: %2$s', 'viewlapse-portale-clienti' ),
 				'<strong>' . esc_html( (string) $who['customer']['name'] ) . '</strong>',
-				esc_html( $names ? implode( ', ', $names ) : __( 'nessuna', 'viewlapse-portale-clienti' ) )
-			)
+				esc_html( $names ? implode( '; ', $names ) : __( 'nessuna', 'viewlapse-portale-clienti' ) )
+			) . $note
 		);
 	}
 

@@ -24,6 +24,7 @@ foreach ( get_sites(
 	if ( false !== get_option( 'vl_portale', false ) ) {
 		delete_option( 'vl_portale' );
 		delete_option( 'vl_portale_aspetto' );
+		delete_option( 'vl_portale_version' );
 		remove_role( 'vl_cliente_visione' );
 		remove_role( 'vl_cliente_download' );
 		foreach ( array( 'administrator', 'editor' ) as $vl_role_name ) {
@@ -31,6 +32,7 @@ foreach ( get_sites(
 			if ( $vl_role ) {
 				$vl_role->remove_cap( 'vl_view_webcam' );
 				$vl_role->remove_cap( 'vl_download_original' );
+				$vl_role->remove_cap( 'vl_download_documents' );
 			}
 		}
 		delete_post_meta_by_key( '_vl_pubblica' );
