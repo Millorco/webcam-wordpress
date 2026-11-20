@@ -465,6 +465,14 @@ final class Services {
 		}
 		$day   = Format::valid_date( $r['date'] ?? null ) ?? ( $date ?? $today );
 		$photo = is_array( $r['photo'] ?? null ) ? $r['photo'] : null;
+		if ( null === $date && ! $photo ) {
+			// Senza data scelta si apre sull'ultima foto del giorno disponibile (mese in corso o precedente).
+			$latest = self::pod_latest( $slug, $today, $tz );
+			if ( $latest ) {
+				$day   = $latest['date'];
+				$photo = $latest['photo'];
+			}
+		}
 		$max   = in_array( (int) $attrs['dimensione'], Format::SIZES, true ) ? (int) $attrs['dimensione'] : 1920;
 		$name  = (string) ( $cam['name'] ?? '' );
 
@@ -509,6 +517,35 @@ final class Services {
 			$o .= self::pod_month( $cam, $req, $day, $tz, (string) $sel, $id );
 		}
 		return $o;
+	}
+
+	/**
+	 * Ultima foto del giorno disponibile nel mese in corso o in quello precedente.
+	 *
+	 * @param string       $slug  Slug.
+	 * @param string       $today Oggi, AAAA-MM-GG.
+	 * @param DateTimeZone $tz    Fuso.
+	 * @return array{date: string, photo: array<string, mixed>}|null
+	 */
+	private static function pod_latest( string $slug, string $today, DateTimeZone $tz ): ?array {
+		$month = substr( $today, 0, 7 );
+		$prev  = ( new DateTimeImmutable( $month . '-01 12:00', $tz ) )->modify( '-1 month' )->format( 'Y-m' );
+		foreach ( array( $month, $prev ) as $m ) {
+			$r = Api::photos_of_day( $slug, $m, $m === $month );
+			if ( is_wp_error( $r ) ) {
+				return null;
+			}
+			$best = null;
+			foreach ( (array) ( $r['days'] ?? array() ) as $d ) {
+				if ( is_array( $d ) && is_array( $d['photo'] ?? null ) && null !== Format::valid_date( $d['date'] ?? null ) && $d['date'] <= $today && ( null === $best || $d['date'] > $best['date'] ) ) {
+					$best = array( 'date' => (string) $d['date'], 'photo' => $d['photo'] );
+				}
+			}
+			if ( $best ) {
+				return $best;
+			}
+		}
+		return null;
 	}
 
 	/**
