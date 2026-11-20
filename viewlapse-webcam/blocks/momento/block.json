@@ -1,0 +1,66 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "viewlapse/momento",
+    "version": "1.1.0",
+    "title": "Webcam: stesso momento",
+    "category": "viewlapse",
+    "icon": "backup",
+    "description": "La stessa ora in giorni diversi: griglia o sfoglia con il cursore.",
+    "keywords": [
+        "webcam",
+        "stesso momento",
+        "giorni"
+    ],
+    "textdomain": "viewlapse-webcam",
+    "attributes": {
+        "webcam": {
+            "type": "string",
+            "default": ""
+        },
+        "scelta": {
+            "type": "boolean",
+            "default": false
+        },
+        "ora": {
+            "type": "string",
+            "default": "12:00"
+        },
+        "giorni": {
+            "type": "integer",
+            "default": 30
+        },
+        "passo": {
+            "type": "string",
+            "default": "giorno"
+        },
+        "buone": {
+            "type": "boolean",
+            "default": true
+        },
+        "scegli": {
+            "type": "boolean",
+            "default": true
+        },
+        "colonne": {
+            "type": "integer",
+            "default": 5
+        },
+        "vista": {
+            "type": "string",
+            "default": "griglia"
+        }
+    },
+    "supports": {
+        "html": false,
+        "align": [
+            "wide",
+            "full"
+        ],
+        "spacing": {
+            "margin": true
+        }
+    },
+    "editorScript": "viewlapse-webcam-editor",
+    "style": "viewlapse-webcam"
+}

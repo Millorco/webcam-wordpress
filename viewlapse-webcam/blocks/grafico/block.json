@@ -1,0 +1,54 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "viewlapse/grafico",
+    "version": "1.1.0",
+    "title": "Webcam: temperatura e umidità",
+    "category": "viewlapse",
+    "icon": "chart-line",
+    "description": "Grafico delle medie orarie di temperatura e umidità esterne.",
+    "keywords": [
+        "webcam",
+        "meteo",
+        "grafico"
+    ],
+    "textdomain": "viewlapse-webcam",
+    "attributes": {
+        "webcam": {
+            "type": "string",
+            "default": ""
+        },
+        "scelta": {
+            "type": "boolean",
+            "default": false
+        },
+        "giorni": {
+            "type": "integer",
+            "default": 2
+        },
+        "campi": {
+            "type": "string",
+            "default": "temperatura,umidita"
+        },
+        "scegli": {
+            "type": "boolean",
+            "default": true
+        },
+        "altezza": {
+            "type": "integer",
+            "default": 260
+        }
+    },
+    "supports": {
+        "html": false,
+        "align": [
+            "wide",
+            "full"
+        ],
+        "spacing": {
+            "margin": true
+        }
+    },
+    "editorScript": "viewlapse-webcam-editor",
+    "style": "viewlapse-webcam"
+}

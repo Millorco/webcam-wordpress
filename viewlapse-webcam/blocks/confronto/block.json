@@ -1,0 +1,54 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "viewlapse/confronto",
+    "version": "1.1.0",
+    "title": "Webcam: prima e dopo",
+    "category": "viewlapse",
+    "icon": "image-flip-horizontal",
+    "description": "Due foto della webcam a confronto con un cursore.",
+    "keywords": [
+        "webcam",
+        "confronto",
+        "prima dopo"
+    ],
+    "textdomain": "viewlapse-webcam",
+    "attributes": {
+        "webcam": {
+            "type": "string",
+            "default": ""
+        },
+        "scelta": {
+            "type": "boolean",
+            "default": false
+        },
+        "a": {
+            "type": "string",
+            "default": ""
+        },
+        "b": {
+            "type": "string",
+            "default": ""
+        },
+        "scegli": {
+            "type": "boolean",
+            "default": true
+        },
+        "dimensione": {
+            "type": "integer",
+            "default": 1920
+        }
+    },
+    "supports": {
+        "html": false,
+        "align": [
+            "wide",
+            "full"
+        ],
+        "spacing": {
+            "margin": true
+        }
+    },
+    "editorScript": "viewlapse-webcam-editor",
+    "style": "viewlapse-webcam"
+}

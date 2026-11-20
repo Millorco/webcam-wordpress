@@ -1,0 +1,1199 @@
+# Copyright (C) 2026 Viewlapse
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Viewlapse Webcam 1.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/viewlapse-webcam\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-11-19T17:48:10+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: viewlapse-webcam\n"
+
+#. Plugin Name of the plugin
+#: viewlapse-webcam.php
+#: includes/class-admin.php:40
+#: includes/class-admin.php:58
+#: includes/class-admin.php:108
+#: includes/class-blocks.php:46
+msgid "Viewlapse Webcam"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: viewlapse-webcam.php
+msgid "https://github.com/Millorco/webcam-wordpress"
+msgstr ""
+
+#. Description of the plugin
+#: viewlapse-webcam.php
+msgid "Mostra le webcam time-lapse Viewlapse (foto attuale, archivio, prima/dopo, grafico, elenco e mappa, timelapse, stesso momento, foto del giorno, statistiche e documenti del cliente) con blocchi e shortcode. Le foto restano sul portal Viewlapse."
+msgstr ""
+
+#. Author of the plugin
+#: viewlapse-webcam.php
+msgid "Viewlapse"
+msgstr ""
+
+#: includes/class-admin.php:41
+msgid "Le immagini delle webcam sono servite dal portal Viewlapse: il browser del visitatore le scarica direttamente dal portal, che vede l'indirizzo IP come qualsiasi server web."
+msgstr ""
+
+#: includes/class-admin.php:42
+msgid "Per le statistiche delle webcam il sito manda al portal un conteggio quando una webcam è visibile nella pagina (e la durata di visione, l'avvio di un timelapse, l'apertura di una foto). Sono statistiche aggregate senza cookie: nessun dato è salvato nel browser e il portal non conserva dati personali (l'impronta usata per contare i visitatori distinti di un giorno non è più ricollegabile all'indirizzo IP dopo 48 ore). Al portal arriva solo il nome del sito, non l'indirizzo della pagina."
+msgstr ""
+
+#: includes/class-admin.php:68
+#: assets/js/editor.js:198
+msgid "Impostazioni"
+msgstr ""
+
+#: includes/class-admin.php:119
+msgid "Il plugin legge le webcam dal portal Viewlapse con l'API dei siti. Le chiamate partono da questo server: la chiave non arriva mai al browser dei visitatori. Senza chiave si vedono solo le webcam pubbliche."
+msgstr ""
+
+#: includes/class-admin.php:121
+msgid "Portal e chiave di questo sito sono gestiti dall'amministratore della rete."
+msgstr ""
+
+#: includes/class-admin.php:127
+msgid "Indirizzo del portal"
+msgstr ""
+
+#: includes/class-admin.php:129
+msgid "Senza barra finale e senza /api."
+msgstr ""
+
+#: includes/class-admin.php:132
+msgid "Chiave API del sito"
+msgstr ""
+
+#. translators: %s: inizio della chiave
+#: includes/class-admin.php:141
+msgid "Chiave impostata: %s (lasciare vuoto per non cambiarla)."
+msgstr ""
+
+#: includes/class-admin.php:143
+msgid "Facoltativa: senza chiave solo le webcam pubbliche. Usare una chiave \"public\" del cliente (o \"client\" solo se il sito è riservato)."
+msgstr ""
+
+#: includes/class-admin.php:148
+msgid "Rimuovi la chiave"
+msgstr ""
+
+#: includes/class-admin.php:153
+msgid "Aggiornamento della foto"
+msgstr ""
+
+#: includes/class-admin.php:154
+msgid "minuti (0 = mai; predefinito dei blocchi)"
+msgstr ""
+
+#: includes/class-admin.php:157
+msgid "Cache"
+msgstr ""
+
+#: includes/class-admin.php:159
+msgid "secondi per la foto attuale e l'elenco"
+msgstr ""
+
+#: includes/class-admin.php:160
+msgid "secondi per l'archivio dei giorni passati"
+msgstr ""
+
+#: includes/class-admin.php:161
+msgid "secondi di attesa massima del portal"
+msgstr ""
+
+#: includes/class-admin.php:165
+msgid "Statistiche"
+msgstr ""
+
+#: includes/class-admin.php:166
+msgid "Conta le visualizzazioni delle webcam (statistiche aggregate senza cookie, nessun dato personale conservato)"
+msgstr ""
+
+#: includes/class-admin.php:169
+msgid "Funzioni non incluse"
+msgstr ""
+
+#: includes/class-admin.php:171
+msgid "Mostra un messaggio cortese"
+msgstr ""
+
+#: includes/class-admin.php:172
+msgid "Nascondi il blocco"
+msgstr ""
+
+#: includes/class-admin.php:174
+msgid "Quando un blocco (timelapse, stesso momento, foto del giorno...) usa una funzione che non è nel servizio della webcam. Chi modifica i contenuti vede sempre la spiegazione."
+msgstr ""
+
+#: includes/class-admin.php:177
+msgid "Mappa"
+msgstr ""
+
+#: includes/class-admin.php:179
+msgid "URL delle tessere della mappa (Leaflet è incluso nel plugin e si carica solo nei blocchi con la mappa attiva)."
+msgstr ""
+
+#: includes/class-admin.php:181
+msgid "Attribuzione delle tessere (obbligatoria per OpenStreetMap)."
+msgstr ""
+
+#: includes/class-admin.php:190
+msgid "Prova connessione"
+msgstr ""
+
+#: includes/class-admin.php:195
+msgid "Svuota la cache"
+msgstr ""
+
+#: includes/class-admin.php:197
+msgid "Blocchi e shortcode"
+msgstr ""
+
+#: includes/class-admin.php:198
+msgid "Nell'editor: categoria \"Viewlapse Webcam\". Shortcode equivalenti:"
+msgstr ""
+
+#: includes/class-admin.php:208
+msgid "(solo con la chiave \"client\", nell'area riservata)"
+msgstr ""
+
+#: includes/class-admin.php:219
+#: includes/class-admin.php:260
+msgid "Permesso negato."
+msgstr ""
+
+#: includes/class-admin.php:232
+msgid "nessuno"
+msgstr ""
+
+#: includes/class-admin.php:236
+msgid "API dei siti 1.1: timelapse, stesso momento, foto del giorno e statistiche secondo il servizio di ogni webcam."
+msgstr ""
+
+#: includes/class-admin.php:237
+msgid "API dei siti 1.0: i blocchi dei servizi (timelapse, stesso momento, foto del giorno, statistiche, documenti) restano nascosti finché il portal non viene aggiornato."
+msgstr ""
+
+#: includes/class-admin.php:239
+msgid "Il portal non produce timelapse nuovi (ffmpeg mancante): si vedono quelli già pronti."
+msgstr ""
+
+#. translators: 1: scope, 2: cliente, 3: numero di webcam
+#: includes/class-admin.php:245
+msgid "Connessione riuscita. Accesso: %1$s, cliente: %2$s, webcam visibili: %3$d."
+msgstr ""
+
+#: includes/class-admin.php:246
+msgid "senza chiave"
+msgstr ""
+
+#: includes/class-admin.php:267
+msgid "Cache svuotata."
+msgstr ""
+
+#: includes/class-api.php:55
+#: includes/class-api.php:120
+msgid "Impostare l'indirizzo del portal Viewlapse."
+msgstr ""
+
+#: includes/class-api.php:169
+msgid "Il portal Viewlapse non risponde."
+msgstr ""
+
+#. translators: %d: codice HTTP
+#: includes/class-api.php:181
+msgid "Risposta inattesa dal portal (HTTP %d)."
+msgstr ""
+
+#: includes/class-chart.php:65
+#: includes/class-render.php:492
+#: assets/js/editor.js:64
+msgid "Temperatura e umidità esterne"
+msgstr ""
+
+#: includes/class-chart.php:116
+msgid "Nessuna misura in questo periodo"
+msgstr ""
+
+#: includes/class-chart.php:132
+msgid "Nessuna misura."
+msgstr ""
+
+#. translators: 1: minima, 2: massima
+#: includes/class-chart.php:138
+msgid "Temperatura media oraria tra %1$s e %2$s."
+msgstr ""
+
+#. translators: 1: minima, 2: massima
+#: includes/class-chart.php:142
+msgid "Umidità tra %1$s e %2$s."
+msgstr ""
+
+#. translators: %s: data e ora
+#: includes/class-chart.php:145
+msgid "Ultimo dato: %s."
+msgstr ""
+
+#: includes/class-format.php:73
+msgid "In linea"
+msgstr ""
+
+#: includes/class-format.php:74
+msgid "In manutenzione"
+msgstr ""
+
+#: includes/class-format.php:75
+msgid "In ritardo"
+msgstr ""
+
+#: includes/class-format.php:76
+msgid "Non in linea"
+msgstr ""
+
+#: includes/class-format.php:77
+msgid "Mai collegata"
+msgstr ""
+
+#: includes/class-format.php:78
+msgid "Da installare"
+msgstr ""
+
+#: includes/class-format.php:79
+msgid "Archivio"
+msgstr ""
+
+#: includes/class-format.php:81
+msgid "Stato sconosciuto"
+msgstr ""
+
+#: includes/class-plugin.php:73
+msgid "Chiudi"
+msgstr ""
+
+#: includes/class-plugin.php:74
+msgid "Foto precedente"
+msgstr ""
+
+#: includes/class-plugin.php:75
+msgid "Foto successiva"
+msgstr ""
+
+#: includes/class-plugin.php:76
+#: includes/class-render.php:496
+#: includes/class-services.php:490
+msgid "Scarica l'originale"
+msgstr ""
+
+#: includes/class-plugin.php:77
+msgid "Aggiornamento non riuscito"
+msgstr ""
+
+#: includes/class-plugin.php:78
+#: includes/class-services.php:387
+msgid "Riproduci"
+msgstr ""
+
+#: includes/class-plugin.php:79
+msgid "Pausa"
+msgstr ""
+
+#: includes/class-render.php:226
+msgid "Il portal Viewlapse non offre ancora questa funzione: serve l'API dei siti 1.1 (portal 0.4)."
+msgstr ""
+
+#: includes/class-render.php:229
+msgid "Questa funzione è disponibile solo nell'area riservata del cliente (chiave \"client\")."
+msgstr ""
+
+#: includes/class-render.php:232
+msgid "Non disponibile per le webcam in archivio dopo la fine del noleggio."
+msgstr ""
+
+#: includes/class-render.php:241
+msgid "Questa funzione non è compresa nel servizio attivo per questa webcam."
+msgstr ""
+
+#. translators: %s: nome della funzione nel listino
+#: includes/class-render.php:245
+msgid "(funzione \"%s\"; messaggio visibile a chi modifica i contenuti)"
+msgstr ""
+
+#: includes/class-render.php:250
+msgid "Non disponibile per questa webcam."
+msgstr ""
+
+#: includes/class-render.php:313
+msgid "Webcam non disponibile al momento."
+msgstr ""
+
+#: includes/class-render.php:319
+#: includes/class-render.php:362
+msgid "Webcam non trovata."
+msgstr ""
+
+#: includes/class-render.php:354
+#: includes/class-render.php:851
+msgid "Nessuna webcam disponibile."
+msgstr ""
+
+#: includes/class-render.php:376
+#: assets/js/editor.js:41
+msgid "Webcam"
+msgstr ""
+
+#: includes/class-render.php:379
+msgid "(archivio)"
+msgstr ""
+
+#: includes/class-render.php:382
+#: includes/class-services.php:438
+msgid "Mostra"
+msgstr ""
+
+#. translators: 1: nome della webcam, 2: data e ora
+#: includes/class-render.php:462
+msgid "Webcam %1$s, foto del %2$s"
+msgstr ""
+
+#: includes/class-render.php:465
+msgid "Nessuna foto disponibile."
+msgstr ""
+
+#. translators: %s: data
+#: includes/class-render.php:476
+msgid "Noleggio concluso: archivio visibile fino al %s."
+msgstr ""
+
+#: includes/class-render.php:541
+msgid "Sponsor"
+msgstr ""
+
+#: includes/class-render.php:576
+#: includes/class-render.php:721
+#: includes/class-services.php:312
+msgid "L'archivio è ancora vuoto."
+msgstr ""
+
+#. translators: %s: numero di foto
+#: includes/class-render.php:600
+msgid "%s foto"
+msgid_plural "%s foto"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-render.php:605
+msgid "Nessuna foto in questo giorno."
+msgstr ""
+
+#. translators: %s: ora
+#: includes/class-render.php:619
+msgid "Foto delle %s"
+msgstr ""
+
+#: includes/class-render.php:660
+#: includes/class-services.php:539
+#: includes/class-services.php:900
+msgid "Mese precedente"
+msgstr ""
+
+#: includes/class-render.php:664
+#: includes/class-services.php:541
+#: includes/class-services.php:902
+msgid "Mese successivo"
+msgstr ""
+
+#. translators: 1: data, 2: numero di foto
+#: includes/class-render.php:687
+msgid "%1$s, %2$s foto"
+msgid_plural "%1$s, %2$s foto"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-render.php:743
+msgid "Prima"
+msgstr ""
+
+#: includes/class-render.php:744
+msgid "Dopo"
+msgstr ""
+
+#: includes/class-render.php:748
+msgid "Confronta"
+msgstr ""
+
+#: includes/class-render.php:756
+msgid "Nessuna foto vicina alle date scelte."
+msgstr ""
+
+#. translators: %s: data e ora
+#: includes/class-render.php:763
+msgid "Prima: %s"
+msgstr ""
+
+#. translators: %s: data e ora
+#: includes/class-render.php:765
+msgid "Dopo: %s"
+msgstr ""
+
+#: includes/class-render.php:769
+msgid "Sposta il cursore tra prima e dopo"
+msgstr ""
+
+#: includes/class-render.php:811
+#: includes/class-services.php:422
+#: includes/class-services.php:591
+#: includes/class-services.php:863
+msgid "Periodo"
+msgstr ""
+
+#: includes/class-render.php:813
+msgid "24 ore"
+msgstr ""
+
+#: includes/class-render.php:814
+msgid "48 ore"
+msgstr ""
+
+#: includes/class-render.php:815
+#: includes/class-services.php:424
+#: includes/class-services.php:593
+msgid "7 giorni"
+msgstr ""
+
+#: includes/class-render.php:816
+#: includes/class-services.php:425
+#: includes/class-services.php:594
+msgid "30 giorni"
+msgstr ""
+
+#: includes/class-render.php:829
+msgid "Temperatura esterna (media oraria, fascia minima–massima)"
+msgstr ""
+
+#: includes/class-render.php:832
+msgid "Umidità esterna"
+msgstr ""
+
+#: includes/class-render.php:868
+msgid "Nessuna foto"
+msgstr ""
+
+#: includes/class-render.php:904
+msgid "Mappa delle webcam"
+msgstr ""
+
+#: includes/class-rest.php:67
+msgid "Contesto non valido."
+msgstr ""
+
+#: includes/class-rest.php:77
+msgid "Accesso riservato."
+msgstr ""
+
+#: includes/class-services.php:166
+msgid "Nessun timelapse ancora pronto."
+msgstr ""
+
+#: includes/class-services.php:189
+msgid "verticale"
+msgstr ""
+
+#: includes/class-services.php:207
+msgid "Tutti"
+msgstr ""
+
+#: includes/class-services.php:208
+#: includes/class-services.php:630
+#: includes/class-services.php:942
+msgid "Giorno"
+msgstr ""
+
+#: includes/class-services.php:209
+msgid "Settimana"
+msgstr ""
+
+#: includes/class-services.php:210
+#: includes/class-services.php:630
+#: includes/class-services.php:832
+msgid "Mese"
+msgstr ""
+
+#: includes/class-services.php:211
+msgid "Periodi"
+msgstr ""
+
+#: includes/class-services.php:212
+msgid "Filmato finale"
+msgstr ""
+
+#: includes/class-services.php:215
+msgid "Tipo di timelapse"
+msgstr ""
+
+#. translators: %s: periodo del timelapse
+#: includes/class-services.php:249
+msgid "Timelapse: %s"
+msgstr ""
+
+#: includes/class-services.php:251
+msgid "Guarda il video"
+msgstr ""
+
+#. translators: %s: numero di fotogrammi
+#: includes/class-services.php:256
+msgid "%s fotogramma"
+msgid_plural "%s fotogrammi"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s: dimensione del file
+#: includes/class-services.php:262
+msgid "Scarica il video (MP4, %s)"
+msgstr ""
+
+#. translators: %s: dimensione del file
+#: includes/class-services.php:262
+msgid "Scarica il video"
+msgstr ""
+
+#. translators: 1: primo giorno, 2: ultimo giorno
+#: includes/class-services.php:283
+msgid "Settimana dal %1$s al %2$s"
+msgstr ""
+
+#. translators: 1: primo giorno, 2: ultimo giorno
+#: includes/class-services.php:288
+msgid "Filmato finale, dal %1$s al %2$s"
+msgstr ""
+
+#. translators: 1: primo giorno, 2: ultimo giorno
+#: includes/class-services.php:291
+msgid "Dal %1$s al %2$s"
+msgstr ""
+
+#: includes/class-services.php:346
+msgid "Nessuna foto vicina all'ora scelta in questo periodo."
+msgstr ""
+
+#. translators: 1: ora, 2: giorni con foto, 3: giorni del periodo
+#: includes/class-services.php:351
+msgid "Ore %1$s: %2$s foto su %3$s giorni."
+msgstr ""
+
+#: includes/class-services.php:388
+msgid "Scorri i giorni"
+msgstr ""
+
+#: includes/class-services.php:412
+msgid "Ora"
+msgstr ""
+
+#: includes/class-services.php:413
+msgid "Ogni"
+msgstr ""
+
+#: includes/class-services.php:415
+#: assets/js/editor.js:125
+msgid "giorno"
+msgstr ""
+
+#: includes/class-services.php:416
+#: assets/js/editor.js:126
+msgid "settimana"
+msgstr ""
+
+#: includes/class-services.php:417
+#: assets/js/editor.js:127
+msgid "mese"
+msgstr ""
+
+#: includes/class-services.php:418
+#: assets/js/editor.js:128
+msgid "anno"
+msgstr ""
+
+#: includes/class-services.php:426
+msgid "3 mesi"
+msgstr ""
+
+#: includes/class-services.php:427
+msgid "1 anno"
+msgstr ""
+
+#: includes/class-services.php:428
+msgid "3 anni"
+msgstr ""
+
+#. translators: %s: numero di giorni
+#: includes/class-services.php:432
+msgid "%s giorni"
+msgstr ""
+
+#. translators: 1: nome della webcam, 2: data
+#: includes/class-services.php:475
+msgid "Webcam %1$s, foto del giorno %2$s"
+msgstr ""
+
+#: includes/class-services.php:477
+msgid "Nessuna foto del giorno per questa data."
+msgstr ""
+
+#. translators: %s: data
+#: includes/class-services.php:481
+msgid "Foto del giorno, %s"
+msgstr ""
+
+#: includes/class-services.php:496
+msgid "Per i social:"
+msgstr ""
+
+#: includes/class-services.php:498
+msgid "quadrata 1080 × 1080"
+msgstr ""
+
+#: includes/class-services.php:499
+msgid "verticale 1080 × 1350"
+msgstr ""
+
+#: includes/class-services.php:500
+msgid "storia 1080 × 1920"
+msgstr ""
+
+#: includes/class-services.php:545
+msgid "Nessuna foto del giorno in questo mese."
+msgstr ""
+
+#: includes/class-services.php:595
+msgid "90 giorni"
+msgstr ""
+
+#: includes/class-services.php:596
+msgid "12 mesi"
+msgstr ""
+
+#: includes/class-services.php:609
+#: includes/class-services.php:626
+#: includes/class-services.php:630
+#: includes/class-services.php:638
+msgid "Visualizzazioni"
+msgstr ""
+
+#: includes/class-services.php:609
+msgid "pagine con la webcam (siti e pannello)"
+msgstr ""
+
+#: includes/class-services.php:610
+#: includes/class-services.php:626
+#: includes/class-services.php:630
+msgid "Visitatori"
+msgstr ""
+
+#: includes/class-services.php:610
+msgid "distinti per giorno"
+msgstr ""
+
+#: includes/class-services.php:611
+msgid "Tempo medio"
+msgstr ""
+
+#: includes/class-services.php:611
+msgid "di visione"
+msgstr ""
+
+#: includes/class-services.php:612
+msgid "Timelapse avviati"
+msgstr ""
+
+#: includes/class-services.php:613
+msgid "Foto aperte"
+msgstr ""
+
+#: includes/class-services.php:613
+msgid "a schermo intero"
+msgstr ""
+
+#: includes/class-services.php:614
+msgid "Richieste dell'immagine"
+msgstr ""
+
+#: includes/class-services.php:614
+msgid "Windy e siti che la incorporano"
+msgstr ""
+
+#: includes/class-services.php:617
+msgid "Telegram"
+msgstr ""
+
+#: includes/class-services.php:617
+msgid "comandi /foto e /meteo"
+msgstr ""
+
+#: includes/class-services.php:629
+msgid "Tabella dei dati"
+msgstr ""
+
+#: includes/class-services.php:630
+msgid "Tempo di visione"
+msgstr ""
+
+#: includes/class-services.php:630
+#: assets/js/editor.js:103
+msgid "Timelapse"
+msgstr ""
+
+#: includes/class-services.php:630
+msgid "Immagine"
+msgstr ""
+
+#: includes/class-services.php:638
+msgid "Siti che mostrano la webcam"
+msgstr ""
+
+#: includes/class-services.php:638
+msgid "Sito"
+msgstr ""
+
+#: includes/class-services.php:641
+msgid "(sconosciuto)"
+msgstr ""
+
+#: includes/class-services.php:641
+msgid "(altri)"
+msgstr ""
+
+#: includes/class-services.php:645
+msgid "Contatori aggregati, raccolti senza cookie e senza conservare dati personali. Il giorno in corso è parziale."
+msgstr ""
+
+#: includes/class-services.php:677
+msgid "Visualizzazioni e visitatori"
+msgstr ""
+
+#: includes/class-services.php:684
+msgid "Nessuna visualizzazione nel periodo."
+msgstr ""
+
+#: includes/class-services.php:767
+msgid "Il download dei documenti è riservato agli utenti autorizzati."
+msgstr ""
+
+#: includes/class-services.php:770
+msgid "Anno"
+msgstr ""
+
+#: includes/class-services.php:771
+msgid "Anno precedente"
+msgstr ""
+
+#: includes/class-services.php:773
+msgid "Anno successivo"
+msgstr ""
+
+#: includes/class-services.php:777
+#: assets/js/editor.js:156
+msgid "Rapporti mensili"
+msgstr ""
+
+#: includes/class-services.php:782
+msgid "Certificati delle giornate di maltempo"
+msgstr ""
+
+#: includes/class-services.php:830
+msgid "Nessun rapporto in questo anno. Il rapporto di un mese si prepara nei primi giorni del mese dopo."
+msgstr ""
+
+#: includes/class-services.php:832
+msgid "Disponibilità"
+msgstr ""
+
+#: includes/class-services.php:832
+#: includes/class-services.php:942
+msgid "Foto"
+msgstr ""
+
+#: includes/class-services.php:832
+msgid "Giorni di maltempo"
+msgstr ""
+
+#: includes/class-services.php:832
+msgid "Inviato per email"
+msgstr ""
+
+#: includes/class-services.php:832
+#: includes/class-services.php:863
+msgid "PDF"
+msgstr ""
+
+#: includes/class-services.php:841
+msgid "no"
+msgstr ""
+
+#. translators: %s: dimensione
+#: includes/class-services.php:843
+#: includes/class-services.php:876
+msgid "Scarica (%s)"
+msgstr ""
+
+#. translators: %s: dimensione
+#: includes/class-services.php:843
+#: includes/class-services.php:876
+msgid "Scarica"
+msgstr ""
+
+#: includes/class-services.php:861
+msgid "Nessun certificato in questo anno."
+msgstr ""
+
+#: includes/class-services.php:863
+#: includes/class-services.php:927
+msgid "Maltempo"
+msgstr ""
+
+#: includes/class-services.php:863
+msgid "Non certificabili"
+msgstr ""
+
+#: includes/class-services.php:863
+msgid "Emesso"
+msgstr ""
+
+#: includes/class-services.php:863
+msgid "SHA-256 del PDF"
+msgstr ""
+
+#: includes/class-services.php:898
+#: assets/js/editor.js:158
+msgid "Registro giornaliero e giornate di maltempo"
+msgstr ""
+
+#: includes/class-services.php:899
+msgid "Mese del registro"
+msgstr ""
+
+#: includes/class-services.php:910
+msgid "Nessun giorno registrato in questo mese (i giorni si sigillano il giorno dopo)."
+msgstr ""
+
+#. translators: 1: giorni registrati, 2: giorni di maltempo, 3: giorni non certificabili, 4: ore di lavoro
+#: includes/class-services.php:917
+msgid "%1$s giorni registrati, %2$s di maltempo, %3$s non certificabili. Ore di lavoro: %4$s."
+msgstr ""
+
+#: includes/class-services.php:926
+msgid "Regolare"
+msgstr ""
+
+#: includes/class-services.php:928
+msgid "Non certificabile"
+msgstr ""
+
+#: includes/class-services.php:929
+msgid "Nessun dato"
+msgstr ""
+
+#: includes/class-services.php:932
+msgid "umido"
+msgstr ""
+
+#: includes/class-services.php:933
+msgid "gelo"
+msgstr ""
+
+#: includes/class-services.php:934
+msgid "nebbia"
+msgstr ""
+
+#: includes/class-services.php:935
+msgid "scuro"
+msgstr ""
+
+#: includes/class-services.php:936
+msgid "sensore esterno assente"
+msgstr ""
+
+#: includes/class-services.php:937
+msgid "pochi campioni"
+msgstr ""
+
+#: includes/class-services.php:938
+msgid "poche foto"
+msgstr ""
+
+#: includes/class-services.php:939
+msgid "ora non sincronizzata"
+msgstr ""
+
+#: includes/class-services.php:942
+msgid "Esito"
+msgstr ""
+
+#: includes/class-services.php:942
+msgid "Ore umide / gelo / nebbia"
+msgstr ""
+
+#: includes/class-services.php:942
+msgid "Temperatura min–max"
+msgstr ""
+
+#: includes/class-services.php:942
+msgid "Umidità media"
+msgstr ""
+
+#: includes/class-services.php:942
+msgid "Impronta del giorno"
+msgstr ""
+
+#: includes/class-services.php:942
+msgid "Depositata"
+msgstr ""
+
+#: includes/class-services.php:942
+msgid "Elenco"
+msgstr ""
+
+#: includes/class-services.php:950
+msgid "non lavorativo"
+msgstr ""
+
+#: includes/class-services.php:957
+msgid "non ancora"
+msgstr ""
+
+#: includes/class-services.php:958
+msgid ".txt"
+msgstr ""
+
+#: includes/class-services.php:961
+msgid "Il registro prova integrità e ora delle foto: ogni elenco contiene gli SHA-256 delle foto del giorno e si verifica con sha256sum; l'impronta del giorno è depositata in Dolibarr il giorno dopo. La classificazione meteo è un indizio ricavato da umidità, punto di rugiada, temperatura e foto (nessuna misura di pioggia, vento o neve) secondo le soglie concordate nel contratto."
+msgstr ""
+
+#: includes/class-settings.php:98
+msgid "La chiave non è valida: deve iniziare con vls_ ed essere lunga 47 caratteri. Non è stata salvata."
+msgstr ""
+
+#: assets/js/editor.js:33
+msgid "Prima disponibile"
+msgstr ""
+
+#: assets/js/editor.js:35
+msgid "(privata)"
+msgstr ""
+
+#: assets/js/editor.js:45
+msgid "Le webcam visibili con la chiave del sito."
+msgstr ""
+
+#: assets/js/editor.js:59
+#: assets/js/editor.js:69
+#: assets/js/editor.js:75
+#: assets/js/editor.js:83
+#: assets/js/editor.js:102
+#: assets/js/editor.js:122
+#: assets/js/editor.js:141
+#: assets/js/editor.js:148
+#: assets/js/editor.js:155
+msgid "Il visitatore sceglie la webcam"
+msgstr ""
+
+#: assets/js/editor.js:60
+msgid "Aggiorna ogni (minuti, -1 = impostazione del sito, 0 = mai)"
+msgstr ""
+
+#: assets/js/editor.js:61
+#: assets/js/editor.js:79
+#: assets/js/editor.js:142
+msgid "Dimensione massima"
+msgstr ""
+
+#: assets/js/editor.js:62
+msgid "Nome e località"
+msgstr ""
+
+#: assets/js/editor.js:63
+msgid "Data e ora della foto"
+msgstr ""
+
+#: assets/js/editor.js:65
+msgid "Stato in linea / non in linea"
+msgstr ""
+
+#: assets/js/editor.js:70
+#: assets/js/editor.js:136
+msgid "Colonne della griglia"
+msgstr ""
+
+#: assets/js/editor.js:71
+msgid "Una foto ogni (minuti, 0 = tutte)"
+msgstr ""
+
+#: assets/js/editor.js:76
+msgid "Prima (AAAA-MM-GG o AAAA-MM-GGTHH:MM, vuoto = primo giorno)"
+msgstr ""
+
+#: assets/js/editor.js:77
+msgid "Dopo (vuoto = adesso)"
+msgstr ""
+
+#: assets/js/editor.js:78
+msgid "Il visitatore sceglie le date"
+msgstr ""
+
+#: assets/js/editor.js:84
+msgid "Giorni mostrati"
+msgstr ""
+
+#: assets/js/editor.js:85
+msgid "Misure"
+msgstr ""
+
+#: assets/js/editor.js:86
+msgid "Temperatura e umidità"
+msgstr ""
+
+#: assets/js/editor.js:87
+msgid "Solo temperatura"
+msgstr ""
+
+#: assets/js/editor.js:88
+msgid "Solo umidità"
+msgstr ""
+
+#: assets/js/editor.js:90
+#: assets/js/editor.js:150
+msgid "Il visitatore sceglie il periodo"
+msgstr ""
+
+#: assets/js/editor.js:91
+msgid "Altezza"
+msgstr ""
+
+#: assets/js/editor.js:94
+msgid "Mostra l'ultima foto"
+msgstr ""
+
+#: assets/js/editor.js:95
+msgid "Colonne"
+msgstr ""
+
+#: assets/js/editor.js:96
+msgid "Link di ogni webcam ({slug} = nome della webcam), es. /webcam/?vl_cam={slug}"
+msgstr ""
+
+#: assets/js/editor.js:97
+msgid "Mostra la mappa (Leaflet)"
+msgstr ""
+
+#: assets/js/editor.js:98
+msgid "Altezza della mappa"
+msgstr ""
+
+#: assets/js/editor.js:104
+msgid "Il più recente (con le schede per tipo)"
+msgstr ""
+
+#: assets/js/editor.js:105
+msgid "Del giorno"
+msgstr ""
+
+#: assets/js/editor.js:106
+msgid "Della settimana"
+msgstr ""
+
+#: assets/js/editor.js:107
+msgid "Del mese"
+msgstr ""
+
+#: assets/js/editor.js:108
+msgid "Periodi scelti (solo area riservata)"
+msgstr ""
+
+#: assets/js/editor.js:109
+msgid "Filmato finale (solo area riservata)"
+msgstr ""
+
+#: assets/js/editor.js:111
+msgid "Formato"
+msgstr ""
+
+#: assets/js/editor.js:112
+msgid "Orizzontali e verticali"
+msgstr ""
+
+#: assets/js/editor.js:113
+msgid "Orizzontale 16:9"
+msgstr ""
+
+#: assets/js/editor.js:114
+msgid "Verticale 9:16"
+msgstr ""
+
+#: assets/js/editor.js:116
+msgid "Elenco degli altri timelapse"
+msgstr ""
+
+#: assets/js/editor.js:117
+msgid "Timelapse nell'elenco"
+msgstr ""
+
+#: assets/js/editor.js:118
+msgid "Avvio automatico, senza audio, in ciclo"
+msgstr ""
+
+#: assets/js/editor.js:123
+msgid "Ora (HH:MM, fuso della webcam)"
+msgstr ""
+
+#: assets/js/editor.js:124
+msgid "Una foto ogni"
+msgstr ""
+
+#: assets/js/editor.js:130
+msgid "Periodo (giorni fino a oggi)"
+msgstr ""
+
+#: assets/js/editor.js:131
+msgid "Preferisci le foto buone (senza nebbia, gocce, controluce)"
+msgstr ""
+
+#: assets/js/editor.js:132
+msgid "Vista"
+msgstr ""
+
+#: assets/js/editor.js:133
+msgid "Griglia"
+msgstr ""
+
+#: assets/js/editor.js:134
+msgid "Sfoglia con il cursore"
+msgstr ""
+
+#: assets/js/editor.js:137
+msgid "Il visitatore sceglie ora, passo e periodo"
+msgstr ""
+
+#: assets/js/editor.js:143
+msgid "Link ai formati per i social (quadrato, verticale, storia)"
+msgstr ""
+
+#: assets/js/editor.js:144
+msgid "Foto del giorno del mese"
+msgstr ""
+
+#: assets/js/editor.js:149
+msgid "Giorni"
+msgstr ""
+
+#: assets/js/editor.js:151
+msgid "Altezza del grafico"
+msgstr ""
+
+#: assets/js/editor.js:157
+msgid "Certificati di maltempo"
+msgstr ""

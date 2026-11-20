@@ -1,0 +1,398 @@
+# Copyright (C) 2026 Viewlapse
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Viewlapse Portale clienti 1.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/viewlapse-portale-clienti\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-11-19T17:48:10+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: viewlapse-portale-clienti\n"
+
+#. Plugin Name of the plugin
+#: viewlapse-portale-clienti.php
+msgid "Viewlapse Portale clienti"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: viewlapse-portale-clienti.php
+msgid "https://github.com/Millorco/webcam-wordpress"
+msgstr ""
+
+#. Description of the plugin
+#: viewlapse-portale-clienti.php
+msgid "Un sottosito riservato per ogni cliente Viewlapse in WordPress Multisite: chiave del cliente per sito, pagine pronte (Webcam, Archivio, Confronto, Dati, Timelapse, Stesso momento, Foto del giorno, Statistiche, Rapporti e certificati), logo e colori del cliente, ruoli \"Cliente - visione\" e \"Cliente - download\". Richiede Viewlapse Webcam."
+msgstr ""
+
+#. Author of the plugin
+#: viewlapse-portale-clienti.php
+msgid "Viewlapse"
+msgstr ""
+
+#: includes/class-access.php:94
+msgid "Il tuo utente non ha accesso a quest'area riservata."
+msgstr ""
+
+#: includes/class-access.php:94
+#: includes/class-appearance.php:173
+msgid "Esci"
+msgstr ""
+
+#: includes/class-access.php:95
+msgid "Accesso riservato"
+msgstr ""
+
+#: includes/class-access.php:127
+msgid "Area riservata: accesso necessario."
+msgstr ""
+
+#: includes/class-access.php:232
+msgid "Rendi riservata"
+msgstr ""
+
+#: includes/class-access.php:232
+msgid "Rendi pubblica"
+msgstr ""
+
+#: includes/class-access.php:245
+msgid "Pubblica (senza login)"
+msgstr ""
+
+#: includes/class-access.php:257
+#: includes/class-network.php:171
+msgid "Permesso negato."
+msgstr ""
+
+#: includes/class-appearance.php:57
+msgid "Personalizza"
+msgstr ""
+
+#: includes/class-appearance.php:73
+msgid "Cliente Viewlapse"
+msgstr ""
+
+#: includes/class-appearance.php:74
+msgid "Logo e colori del cliente: barra in alto, blocchi delle webcam e pagina di login."
+msgstr ""
+
+#: includes/class-appearance.php:91
+msgid "Logo del cliente"
+msgstr ""
+
+#: includes/class-appearance.php:98
+msgid "Colore principale"
+msgstr ""
+
+#: includes/class-appearance.php:99
+msgid "Testo sul colore principale"
+msgstr ""
+
+#: includes/class-appearance.php:175
+msgid "Accedi"
+msgstr ""
+
+#: includes/class-appearance.php:211
+msgid "Area riservata: accedi con l'utente che ti abbiamo inviato."
+msgstr ""
+
+#: includes/class-keys.php:125
+msgid "La chiave non è valida: deve iniziare con vls_ ed essere lunga 47 caratteri."
+msgstr ""
+
+#: includes/class-keys.php:129
+msgid "Impostare prima l'indirizzo del portal della rete."
+msgstr ""
+
+#: includes/class-keys.php:144
+msgid "Il portal non risponde."
+msgstr ""
+
+#: includes/class-keys.php:148
+msgid "Chiave rifiutata dal portal."
+msgstr ""
+
+#: includes/class-keys.php:151
+msgid "Serve una chiave con scope \"client\" di un cliente (una chiave \"public\" non vede le webcam private)."
+msgstr ""
+
+#: includes/class-network.php:33
+#: includes/class-network.php:66
+msgid "Clienti Viewlapse"
+msgstr ""
+
+#: includes/class-network.php:72
+msgid "Portal"
+msgstr ""
+
+#: includes/class-network.php:76
+msgid "Indirizzo del portal"
+msgstr ""
+
+#: includes/class-network.php:78
+msgid "Vale per tutti i sottositi dei clienti."
+msgstr ""
+
+#: includes/class-network.php:80
+msgid "Salva"
+msgstr ""
+
+#: includes/class-network.php:83
+msgid "Sottositi dei clienti"
+msgstr ""
+
+#: includes/class-network.php:85
+msgid "Nessun sottosito cliente."
+msgstr ""
+
+#: includes/class-network.php:89
+msgid "Sito"
+msgstr ""
+
+#: includes/class-network.php:90
+msgid "Cliente del portal"
+msgstr ""
+
+#: includes/class-network.php:91
+msgid "Chiave"
+msgstr ""
+
+#: includes/class-network.php:92
+msgid "Cambia chiave"
+msgstr ""
+
+#: includes/class-network.php:93
+msgid "Dominio proprio"
+msgstr ""
+
+#: includes/class-network.php:104
+msgid "Bacheca"
+msgstr ""
+
+#: includes/class-network.php:105
+msgid "Utenti"
+msgstr ""
+
+#: includes/class-network.php:106
+msgid "Logo e colori"
+msgstr ""
+
+#: includes/class-network.php:113
+msgid "Prova"
+msgstr ""
+
+#: includes/class-network.php:121
+msgid "Sostituisci"
+msgstr ""
+
+#: includes/class-network.php:129
+msgid "Usa"
+msgstr ""
+
+#: includes/class-network.php:138
+msgid "Nuovo sottosito cliente"
+msgstr ""
+
+#: includes/class-network.php:139
+msgid "Il cliente si sceglie con la sua chiave \"client\" del portal (Pannello del portal → Clienti → scheda del cliente → Chiavi API dei siti, oppure bin/site-key.php --crea --cliente ID --scope client): il plugin la verifica e mostra il nome del cliente. Il sottosito nasce con le pagine Webcam, Archivio, Confronto e Dati, riservate agli utenti del sito."
+msgstr ""
+
+#: includes/class-network.php:143
+msgid "Chiave client del cliente"
+msgstr ""
+
+#: includes/class-network.php:145
+msgid "Indirizzo del sottosito"
+msgstr ""
+
+#: includes/class-network.php:147
+msgid "Si può passare in seguito a un dominio proprio del cliente."
+msgstr ""
+
+#: includes/class-network.php:148
+msgid "Titolo"
+msgstr ""
+
+#: includes/class-network.php:149
+msgid "Vuoto = nome del cliente nel portal"
+msgstr ""
+
+#: includes/class-network.php:150
+msgid "Primo utente del cliente"
+msgstr ""
+
+#: includes/class-network.php:153
+#: includes/class-sites.php:138
+msgid "Cliente - download"
+msgstr ""
+
+#: includes/class-network.php:154
+#: includes/class-sites.php:130
+msgid "Cliente - visione"
+msgstr ""
+
+#: includes/class-network.php:156
+msgid "Facoltativo. Riceve l'email di WordPress per scegliere la password. Altri utenti: Utenti del sottosito."
+msgstr ""
+
+#: includes/class-network.php:158
+msgid "Crea il sottosito"
+msgstr ""
+
+#: includes/class-network.php:211
+msgid "Sottosito non trovato."
+msgstr ""
+
+#: includes/class-network.php:228
+msgid "Indirizzo del portal salvato."
+msgstr ""
+
+#: includes/class-network.php:248
+msgid "Sottosito creato, ma:"
+msgstr ""
+
+#. translators: 1: cliente, 2: link al sito
+#: includes/class-network.php:257
+msgid "Sottosito creato per %1$s: %2$s"
+msgstr ""
+
+#: includes/class-network.php:277
+msgid "Chiave sostituita."
+msgstr ""
+
+#. translators: %s: cliente
+#: includes/class-network.php:280
+msgid "Attenzione: ora il sito mostra le webcam di %s."
+msgstr ""
+
+#: includes/class-network.php:302
+msgid "(archivio)"
+msgstr ""
+
+#: includes/class-network.php:315
+msgid "Il portal usa ancora l'API dei siti 1.0: le pagine Timelapse, Stesso momento, Foto del giorno, Statistiche e Rapporti restano vuote per i clienti finché non viene aggiornato."
+msgstr ""
+
+#: includes/class-network.php:317
+msgid "Il portal non produce timelapse nuovi (ffmpeg mancante)."
+msgstr ""
+
+#. translators: 1: cliente, 2: elenco delle webcam
+#: includes/class-network.php:323
+msgid "Chiave valida per %1$s. Webcam: %2$s"
+msgstr ""
+
+#: includes/class-network.php:325
+msgid "nessuna"
+msgstr ""
+
+#: includes/class-network.php:339
+msgid "Dominio non valido (es. webcam.cliente.it)."
+msgstr ""
+
+#: includes/class-network.php:342
+msgid "Il dominio è già usato da un altro sito."
+msgstr ""
+
+#. translators: %s: dominio
+#: includes/class-network.php:361
+msgid "Il sito ora risponde su %s. Il DNS del dominio deve puntare a questo server e il server web deve accettarlo (vedi README)."
+msgstr ""
+
+#: includes/class-portale.php:55
+#: includes/class-portale.php:68
+msgid "Viewlapse Portale clienti richiede WordPress Multisite."
+msgstr ""
+
+#: includes/class-portale.php:56
+msgid "Viewlapse Portale clienti richiede il plugin Viewlapse Webcam attivo in tutta la rete."
+msgstr ""
+
+#: includes/class-sites.php:39
+msgid "Per scaricare rapporti, certificati ed elenchi serve il ruolo \"Cliente - download\": chiedilo a chi gestisce gli utenti del sito."
+msgstr ""
+
+#: includes/class-sites.php:51
+msgid "Questa funzione non è compresa nel servizio della tua webcam. Per aggiungerla contatta Viewlapse."
+msgstr ""
+
+#: includes/class-sites.php:169
+msgid "Indirizzo non valido: solo lettere minuscole, numeri e trattini (almeno 2 caratteri)."
+msgstr ""
+
+#: includes/class-sites.php:177
+msgid "Questo indirizzo è riservato da WordPress."
+msgstr ""
+
+#: includes/class-sites.php:183
+msgid "Esiste già un sito con questo indirizzo."
+msgstr ""
+
+#. translators: %s: nome del cliente
+#: includes/class-sites.php:236
+msgid "Area riservata webcam di %s"
+msgstr ""
+
+#: includes/class-sites.php:287
+msgid "Webcam"
+msgstr ""
+
+#: includes/class-sites.php:289
+msgid "Le tue webcam"
+msgstr ""
+
+#: includes/class-sites.php:293
+msgid "Archivio"
+msgstr ""
+
+#: includes/class-sites.php:297
+msgid "Confronto"
+msgstr ""
+
+#: includes/class-sites.php:301
+msgid "Dati"
+msgstr ""
+
+#: includes/class-sites.php:306
+msgid "Timelapse"
+msgstr ""
+
+#: includes/class-sites.php:310
+msgid "Stesso momento"
+msgstr ""
+
+#: includes/class-sites.php:314
+msgid "Foto del giorno"
+msgstr ""
+
+#: includes/class-sites.php:318
+msgid "Statistiche"
+msgstr ""
+
+#: includes/class-sites.php:322
+msgid "Rapporti e certificati"
+msgstr ""
+
+#: includes/class-sites.php:344
+msgid "Email dell'utente non valida: il sito è stato creato senza utente."
+msgstr ""
+
+#: includes/class-sites.php:357
+msgid "Impossibile creare l'utente del cliente."
+msgstr ""
+
+#: assets/js/editor-pubblica.js:24
+msgid "Accesso"
+msgstr ""
+
+#: assets/js/editor-pubblica.js:26
+msgid "Pagina pubblica (visibile senza login)"
+msgstr ""
+
+#: assets/js/editor-pubblica.js:27
+msgid "Le altre pagine restano riservate agli utenti del cliente."
+msgstr ""

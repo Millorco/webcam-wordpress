@@ -1,0 +1,58 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "viewlapse/timelapse",
+    "version": "1.1.0",
+    "title": "Webcam: timelapse",
+    "category": "viewlapse",
+    "icon": "video-alt3",
+    "description": "Lettore dei timelapse del giorno, della settimana e del mese, orizzontali o verticali.",
+    "keywords": [
+        "webcam",
+        "timelapse",
+        "video"
+    ],
+    "textdomain": "viewlapse-webcam",
+    "attributes": {
+        "webcam": {
+            "type": "string",
+            "default": ""
+        },
+        "scelta": {
+            "type": "boolean",
+            "default": false
+        },
+        "tipo": {
+            "type": "string",
+            "default": "tutti"
+        },
+        "formato": {
+            "type": "string",
+            "default": "tutti"
+        },
+        "elenco": {
+            "type": "boolean",
+            "default": true
+        },
+        "numero": {
+            "type": "integer",
+            "default": 12
+        },
+        "automatico": {
+            "type": "boolean",
+            "default": false
+        }
+    },
+    "supports": {
+        "html": false,
+        "align": [
+            "wide",
+            "full"
+        ],
+        "spacing": {
+            "margin": true
+        }
+    },
+    "editorScript": "viewlapse-webcam-editor",
+    "style": "viewlapse-webcam"
+}

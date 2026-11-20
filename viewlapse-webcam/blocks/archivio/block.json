@@ -1,0 +1,46 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "viewlapse/archivio",
+    "version": "1.1.0",
+    "title": "Webcam: archivio",
+    "category": "viewlapse",
+    "icon": "calendar-alt",
+    "description": "Calendario dei giorni con foto, griglia del giorno e visualizzatore a schermo intero.",
+    "keywords": [
+        "webcam",
+        "archivio",
+        "calendario"
+    ],
+    "textdomain": "viewlapse-webcam",
+    "attributes": {
+        "webcam": {
+            "type": "string",
+            "default": ""
+        },
+        "scelta": {
+            "type": "boolean",
+            "default": false
+        },
+        "colonne": {
+            "type": "integer",
+            "default": 4
+        },
+        "ogni": {
+            "type": "integer",
+            "default": 0
+        }
+    },
+    "supports": {
+        "html": false,
+        "align": [
+            "wide",
+            "full"
+        ],
+        "spacing": {
+            "margin": true
+        }
+    },
+    "editorScript": "viewlapse-webcam-editor",
+    "style": "viewlapse-webcam"
+}
